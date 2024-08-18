@@ -56,7 +56,7 @@ run_verdi:
 	verdi -sv -f filelist -ssf test.fsdb &
 
 clean:
-	rm -rf *.vpd csrc *.log *.key *.vdb simv* DVE* nova* *fsdb
+	rm -rf *.vpd csrc *.log *.key *.vdb simv* DVE* nova* *fsdb verdiLog
 
 mv:
 	-mkdir rtl
