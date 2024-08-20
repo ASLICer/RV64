@@ -1,5 +1,5 @@
 module rename#(
-    parameter DATAWIDTH = 32 
+    parameter PRF_WIDTH = 6 
 )(  
     input clk,
     //源寄存器的逻辑寄存器编号
@@ -17,37 +17,37 @@ module rename#(
     input [4:0] instr2_rd,
     input [4:0] instr3_rd,
     //源寄存器的物理寄存器编号
-    output [4:0] instr0_prs1,
-    output [4:0] instr0_prs2,
-    output [4:0] instr1_prs1,
-    output [4:0] instr1_prs2,
-    output [4:0] instr2_prs1,
-    output [4:0] instr2_prs2,
-    output [4:0] instr3_prs1,
-    output [4:0] instr3_prs2,
+    output [5:0] instr0_prs1,
+    output [5:0] instr0_prs2,
+    output [5:0] instr1_prs1,
+    output [5:0] instr1_prs2,
+    output [5:0] instr2_prs1,
+    output [5:0] instr2_prs2,
+    output [5:0] instr3_prs1,
+    output [5:0] instr3_prs2,
     //目的寄存器的物理寄存器编号
-    output [4:0] instr0_prd,
-    output [4:0] instr1_prd,
-    output [4:0] instr2_prd,
-    output [4:0] instr3_prd， 
+    output [5:0] instr0_prd,
+    output [5:0] instr1_prd,
+    output [5:0] instr2_prd,
+    output [5:0] instr3_prd， 
     //目的寄存器的旧物理寄存器编号
-    output reg [4:0] instr0_preprd,
-    output reg [4:0] instr1_preprd,
-    output reg [4:0] instr2_preprd,
-    output reg [4:0] instr3_preprd   
+    output [5:0] instr0_preprd,
+    output [5:0] instr1_preprd,
+    output [5:0] instr2_preprd,
+    output [5:0] instr3_preprd   
 );
-reg [4:0] rat [31:0]；//重命名映射表
-reg [4:0] freelist [63:0];//空闲列表,FIFO实现
-reg [5:0]fl_raddr;//freelist的读地址
+reg [5:0] rat [31:0]；//重命名映射表
+reg [5:0] freelist [63:0];//空闲列表,FIFO实现
+reg [5:0] fl_raddr;//freelist的读地址
 //从RAT中读取的源寄存器的物理寄存器编号(由于相关性，不一定是正确的)
-reg [4:0] instr0_rat_prs1;
-reg [4:0] instr0_rat_prs2;
-reg [4:0] instr1_rat_prs1;
-reg [4:0] instr1_rat_prs2;
-reg [4:0] instr2_rat_prs1;
-reg [4:0] instr2_rat_prs2;
-reg [4:0] instr3_rat_prs1;
-reg [4:0] instr3_rat_prs2;
+reg [5:0] instr0_rat_prs1;
+reg [5:0] instr0_rat_prs2;
+reg [5:0] instr1_rat_prs1;
+reg [5:0] instr1_rat_prs2;
+reg [5:0] instr2_rat_prs1;
+reg [5:0] instr2_rat_prs2;
+reg [5:0] instr3_rat_prs1;
+reg [5:0] instr3_rat_prs2;
 
 always@(posedge clk)begin
     if(rst)
@@ -55,13 +55,27 @@ always@(posedge clk)begin
     else
         fl_raddr <= fl_raddr+4;
 end
-//从RAT中读取目的寄存器对应的的旧物理寄存器编号
+
+//从RAT中读取目的寄存器对应的的旧物理寄存器编号(由于WAW相关性，不一定是正确的,可能来源于上一条指令的目的寄存器的物理寄存器)
+reg [5:0] instr0_rat_preprd;
+reg [5:0] instr1_rat_preprd;
+reg [5:0] instr2_rat_preprd;
+reg [5:0] instr3_rat_preprd;
+
 always@(posedge clk)begin
-    instr0_preprd <= rat[instr0_rd];
-    instr1_preprd <= rat[instr1_rd];
-    instr2_preprd <= rat[instr2_rd];
-    instr3_preprd <= rat[instr3_rd];    
+    instr0_rat_preprd <= rat[instr0_rd];
+    instr1_rat_preprd <= rat[instr1_rd];
+    instr2_rat_preprd <= rat[instr2_rd];
+    instr3_rat_preprd <= rat[instr3_rd];    
 end
+//输出真正的旧映射关系
+assign instr0_preprd = instr0_rat_preprd;//指令0的旧映射关系只能来源于RAT
+assign instr1_preprd = (instr1_rd == instr0_rd) ? instr0_fl_prd : instr1_rat_preprd;
+assign instr2_preprd = (instr2_rd == instr1_rd) ? instr1_fl_prd : 
+                       (instr2_rd == instr0_rd) ? instr0_fl_prd : instr2_rat_preprd;
+assign instr3_preprd = (instr3_rd == instr2_rd) ? instr2_fl_prd :
+                       (instr3_rd == instr1_rd) ? instr1_fl_prd : 
+                       (instr3_rd == instr0_rd) ? instr0_fl_prd : instr3_rat_preprd;
 
 //从RAT中读取源寄存器对应的的物理寄存器编号
 always@(posedge clk)begin
@@ -74,13 +88,13 @@ always@(posedge clk)begin
     instr3_rat_prs1 <= rat[instr3_rs1];
     instr3_rat_prs2 <= rat[instr3_rs2];
 end
-//从空闲列表中找到空闲的物理寄存器，作为指令的目的寄存器对应的物理寄存器(由于相关性，不一定是正确的)
+//从空闲列表中找到空闲的物理寄存器，作为指令的目的寄存器对应的物理寄存器(由于WAW相关性，不一定是正确的)
 //组合逻辑读freelist,因为读完后还要写新的映射关系进RAT(上升沿写入)
 //整个过程在一个周期内完成
-reg [4:0] instr0_fl_prd;
-reg [4:0] instr1_fl_prd;
-reg [4:0] instr2_fl_prd;
-reg [4:0] instr3_fl_prd;
+reg [5:0] instr0_fl_prd;
+reg [5:0] instr1_fl_prd;
+reg [5:0] instr2_fl_prd;
+reg [5:0] instr3_fl_prd;
 always@(*)begin
     instr0_fl_prd = freelist[fl_raddr];
     instr1_fl_prd = freelist[fl_raddr+1];
@@ -92,7 +106,7 @@ asign instr0_prd = instr0_fl_prd;
 asign instr1_prd = instr1_fl_prd;
 asign instr2_prd = instr2_fl_prd;
 asign instr3_prd = instr3_fl_prd;
-//向RAT中写入新的映射关系(目的寄存器对应的新的物理寄存器,解决WAW相关性)
+//向RAT中写入新的映射关系(目的寄存器对应的新的物理寄存器,若出现WAW相关性,只需写入最新的映射关系)
 always@(posedge clk)begin
     if((instr0_rd != instr1_rd) && (instr0_rd != instr2_rd) && (instr0_rd != instr3_rd))
         rat[instr0_rd] <= instr0_fl_prd;
