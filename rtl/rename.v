@@ -102,10 +102,10 @@ always@(*)begin
     instr3_fl_prd = freelist[fl_raddr+3];
 end
 //目的寄存器的物理寄存器编号就是从空闲列表找到空闲的物理寄存器编号
-asign instr0_prd = instr0_fl_prd;
-asign instr1_prd = instr1_fl_prd;
-asign instr2_prd = instr2_fl_prd;
-asign instr3_prd = instr3_fl_prd;
+assign instr0_prd = instr0_fl_prd;
+assign instr1_prd = instr1_fl_prd;
+assign instr2_prd = instr2_fl_prd;
+assign instr3_prd = instr3_fl_prd;
 //向RAT中写入新的映射关系(目的寄存器对应的新的物理寄存器,若出现WAW相关性,只需写入最新的映射关系)
 always@(posedge clk)begin
     if((instr0_rd != instr1_rd) && (instr0_rd != instr2_rd) && (instr0_rd != instr3_rd))
