@@ -2,7 +2,7 @@ module arbiter#(
     parameter OP = `R_TYPE,
     parameter OPCODE_WIDTH = 7,
     parameter REQ = 1,
-    parameter AGE = 5
+    parameter AGE_WIDTH = 5
 )(
     input [OPCODE_WIDTH-1:0] op [15:0],
     input req [15:0],
@@ -16,16 +16,16 @@ reg req8 [7:0];
 reg req4 [3:0];
 reg req2 [1:0];
 //各级的最小的年龄值
-reg [AGE-1:0]age8 [7:0];
-reg [AGE-1:0]age4 [3:0];
-reg [AGE-1:0]age2 [1:0];
-reg [AGE-1:0]age1;
+reg [AGE_WIDTH-1:0] age8 [7:0];
+reg [AGE_WIDTH-1:0] age4 [3:0];
+reg [AGE_WIDTH-1:0] age2 [1:0];
+reg [AGE_WIDTH-1:0] age1;
 //各级的最小年龄值对应的指令所在发射队列地址
-reg [3:0]addr8 [7:0];
-reg [3:0]addr4 [3:0];
-reg [3:0]addr2 [1:0];
-reg [3:0]addr1;
-assign addr =addr1;
+reg [3:0] addr8 [7:0];
+reg [3:0] addr4 [3:0];
+reg [3:0] addr2 [1:0];
+reg [3:0] addr1;
+assign addr = addr1;
 integer i;
 always@(*)begin
     for(i=0;i<15;i=i+1)
