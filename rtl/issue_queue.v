@@ -6,7 +6,7 @@ module issue_queue#(
     parameter ISSUED = 1,
     parameter FREE = 1,
     parameter AGE = 5,
-    parameter IQ_WIDTH =OPCODE+3*PRF_WIDTH+3*VALID+2*READY+ISSUED+FREE+AGE
+    parameter IQ_WIDTH = OPCODE+3*PRF_WIDTH+3*VALID+2*READY+ISSUED+FREE+AGE
 )(
     input clk,
     //指令的opcode
@@ -41,10 +41,11 @@ module issue_queue#(
     input [PRF_WIDTH-1:0] instr0_prd,
     input [PRF_WIDTH-1:0] instr1_prd,
     input [PRF_WIDTH-1:0] instr2_prd,
-    input [PRF_WIDTH-1:0] instr3_prd
+    input [PRF_WIDTH-1:0] instr3_prd,
 
+    output reg [IQ_WIDTH-1:0] ciq [15:0]//16个表项的集中式发射队列
 );
-reg [IQ_WIDTH-1:0] ciq [15:0];//16个表项的集中式发射队列
+
 //发射队列空闲表项的地址
 wire [3:0] free0_addr;
 wire [3:0] free1_addr;
@@ -61,7 +62,7 @@ always@(*)begin
     for(i=0;i<16;i=i+1)
         ciq_free[i] = ciq[i][0];
 end
-ciq_free ciq_free(
+allocation allocation_u0(
     ciq_free,
     //发射队列空闲表项的地址
     free0_addr,
@@ -83,7 +84,9 @@ always@(posedge clk)begin
     if(free2_valid)
         ciq[free2_addr] <= {instr2_op,instr2_prs1,instr2_prs1_v,instr2_prs1_rdy,instr2_prs2,instr2_prs2_v,instr2_prs2_rdy,instr2_prd,instr2_prd_v,instr2_age,2'b00};
     if(free3_valid)
-         ciq[free3_addr] <= {instr3_op,instr3_prs1,instr3_prs1_v,instr3_prs1_rdy,instr3_prs2,instr3_prs2_v,instr3_prs2_rdy,instr3_prd,instr3_prd_v,instr3_age,2'b00};    
+        ciq[free3_addr] <= {instr3_op,instr3_prs1,instr3_prs1_v,instr3_prs1_rdy,instr3_prs2,instr3_prs2_v,instr3_prs2_rdy,instr3_prd,instr3_prd_v,instr3_age,2'b00};    
 end
-
+always@(posedge clk)begin
+    
+end
 endmoudle
