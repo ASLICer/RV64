@@ -1,4 +1,30 @@
-module issue(
+module issue#(
+    parameter OPCODE = 7,
+    parameter PRF_WIDTH = 6,
+    parameter VALID = 1,
+    parameter READY = 1,
+    parameter ISSUED = 1,
+    parameter FREE = 1,
+    parameter AGE_WIDTH = 5,
+    parameter IQ_WIDTH = OPCODE+3*PRF_WIDTH+3*VALID+2*READY+ISSUED+FREE+AGE
+
+    parameter FREE = 0,
+    parameter ISSUED = FREE+1,
+    parameter AGE_LSB = ISSUED+1,
+    parameter AGE_MSB = AGE_LSB+AGE_WIDTH-1,
+    parameter PRDV = AGE_MSB+1,
+    parameter PRD_LSB = PRDV+1,
+    parameter PRD_MSB = PRD_LSB+PRF_WIDTH-1,
+    parameter PRS2_RDY = PRD_MSB+1,
+    parameter PRS2_LSB = PRS2_RDY+1,
+    parameter PRS2_MSB = PRS2_LSB+PRF_WIDTH-1,
+    parameter PRS1_RDY = PRS2_MSB+1,
+    parameter PRS1_LSB = PRS1_RDY+1,
+    parameter PRS1_MSB = PRS1_LSB+PRF_WIDTH-1,  
+    parameter OP_LSB = PRS1_MSB+1,
+    parameter OP_MSB = OP_LSB+OPCODE_WIDTH-1,
+
+)(
     input reg [IQ_WIDTH-1:0] ciq [15:0]//16个表项的集中式发射队列
     //第一个操作数
     output [DATA_WIDTH-1:0] src0_alu0;
@@ -13,12 +39,17 @@ module issue(
 );
 
 wire [OPCODE_WIDTH-1:0] op [15:0];
-wire req [15:0];
+reg req [15:0];
 wire [AGE-1:0] age [15:0];
 wire [4:0] addr_alu0;
 wire [4:0] addr_alu1;
 wire [4:0] addr_mul;
 wire [4:0] addr_ls;
+
+always@(*)begin
+    for(i=0;i<16;i=i+1)
+        req[i] = 
+end
 arbiter arbiter_u0#(
     .OP(`ALU),
     .OPCODE_WIDTH(7),
