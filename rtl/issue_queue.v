@@ -5,7 +5,7 @@ module issue_queue#(
     parameter READY = 1,
     parameter ISSUED = 1,
     parameter FREE = 1,
-    parameter AGE = 5
+    parameter AGE = 5,
     parameter IQ_WIDTH =OPCODE+3*PRF_WIDTH+3*VALID+2*READY+ISSUED+FREE+AGE
 )(
     input clk,
@@ -41,7 +41,7 @@ module issue_queue#(
     input [PRF_WIDTH-1:0] instr0_prd,
     input [PRF_WIDTH-1:0] instr1_prd,
     input [PRF_WIDTH-1:0] instr2_prd,
-    input [PRF_WIDTH-1:0] instr3_prd，
+    input [PRF_WIDTH-1:0] instr3_prd
 
 );
 reg [IQ_WIDTH-1:0] ciq [15:0];//16个表项的集中式发射队列
