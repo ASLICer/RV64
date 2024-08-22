@@ -1,4 +1,4 @@
-module ciq_free(
+module allocation(
     input [15:0] ciq_free,
     //发射队列空闲表项的地址
     output [3:0] free0_addr,
