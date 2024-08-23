@@ -14,21 +14,19 @@ module wake_up#(
     input [PRF_WIDTH-1:0] ciq_prs1[CIQ_DEPTH-1:0],
     input [PRF_WIDTH-1:0] ciq_prs2[CIQ_DEPTH-1:0],
     //from arbiter
-    input [3:0] arbit_addr [ISSUE_NUM-1:0],
     input [ISSUE_NUM-1:0] arbit_grant,
     //to issue_queue
     output reg prs1_rdy [CIQ_DEPTH-1:0],
     output reg prs2_rdy [CIQ_DEPTH-1:0]    
 );
 wire [PRF_WIDTH-1:0] tag_bus [ISSUE_NUM-1:0];
-integer i;
+integer i,j;
 always@(*)begin
     for(i=0;i<ISSUE_NUM;i=i+1)begin
         tag_bus[i] = arbit_grant[i] ? arbit_prd[i] : tag_bus[i];
     end
 end
 
-integer i,j;
 //比较bus上的寄存器编号和发射队列的源寄存器编号，相等则唤醒，ready置1
 always@(*)begin
     for(i=0;i<CIQ_DEPTH;i=i+1)begin
