@@ -14,10 +14,10 @@ module wake_up#(
     input [4:0] addr_alu1,
     input [4:0] addr_mul,
     input [4:0] addr_ls,
-    input grant_alu0;
-    input grant_alu1;
-    input grant_mul;
-    input grant_ls;
+    input grant_alu0,
+    input grant_alu1,
+    input grant_mul,
+    input grant_ls,
 
     output prs1_rdy [15:0],
     output prs2_rdy [15:0]    
