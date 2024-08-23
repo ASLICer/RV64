@@ -1,24 +1,19 @@
-module allocation(
-    input [15:0] ciq_free,
-    //发射队列空闲表项的地址
-    output [3:0] free0_addr,
-    output [3:0] free1_addr,
-    output [3:0] free2_addr,
-    output [3:0] free3_addr,
-    //所在地址确实是空闲的
-    output free0_valid,
-    output free1_valid,
-    output free2_valid,
-    output free3_valid    
+module allocation#(
+    parameter INSTR_NUM = 4,
+    parameter CIQ_DEPTH = 16
+)(
+    input [CIQ_DEPTH-1:0] ciq_free,//16个空闲标志位   
+    output [3:0] free_addr [INSTR_NUM-1:0],//发射队列空闲表项的地址
+    output [INSTR_NUM-1:0] free_valid//所在地址确实是空闲的   
 );
-assign free0_addr = first_c0 ;
-assign free1_addr = second_c0;
-assign free2_addr = third_c0 ;
-assign free3_addr = fourth_c0;
-assign free0_valid = v_first_c0 ;
-assign free1_valid = v_second_c0;
-assign free2_valid = v_third_c0 ;
-assign free3_valid = v_fourth_c0;
+assign free_addr[0] = first_c0 ;
+assign free_addr[1] = second_c0;
+assign free_addr[2] = third_c0 ;
+assign free_addr[3] = fourth_c0;
+assign free_valid[0] = v_first_c0 ;
+assign free_valid[1] = v_second_c0;
+assign free_valid[2] = v_third_c0 ;
+assign free_valid[3] = v_fourth_c0;
 //找到4个空闲表项，将16个free信号分解，逐级进行解决
 //第一级处理电路
 wire [1:0] first_a3     ,first_a2   ,first_a1   ,first_a0   ;
