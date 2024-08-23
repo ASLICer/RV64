@@ -27,19 +27,136 @@ module issue#(
     parameter OP_MSB = OP_LSB+OPCODE_WIDTH-1,
 
 )(
-    input reg [IQ_WIDTH-1:0] ciq [15:0]//16个表项的集中式发射队列
+    input clk,
+    //指令的opcode
+    input [OPCODE-1:0] instr0_op,
+    input [OPCODE-1:0] instr1_op,
+    input [OPCODE-1:0] instr2_op,
+    input [OPCODE-1:0] instr3_op,
+    //指令是否有源寄存器操作数
+    input instr0_prs1_v,
+    input instr0_prs2_v,
+    input instr1_prs1_v,
+    input instr1_prs2_v,
+    input instr2_prs1_v,
+    input instr2_prs2_v,
+    input instr3_prs1_v,
+    input instr3_prs2_v,
+    //指令是否有目的寄存器
+    input instr0_prd_v,
+    input instr1_prd_v,
+    input instr2_prd_v,
+    input instr3_prd_v，   
+    //源寄存器的物理寄存器编号
+    input [PRF_WIDTH-1:0] instr0_prs1,
+    input [PRF_WIDTH-1:0] instr0_prs2,
+    input [PRF_WIDTH-1:0] instr1_prs1,
+    input [PRF_WIDTH-1:0] instr1_prs2,
+    input [PRF_WIDTH-1:0] instr2_prs1,
+    input [PRF_WIDTH-1:0] instr2_prs2,
+    input [PRF_WIDTH-1:0] instr3_prs1,
+    input [PRF_WIDTH-1:0] instr3_prs2,
+    //目的寄存器的物理寄存器编号
+    input [PRF_WIDTH-1:0] instr0_prd,
+    input [PRF_WIDTH-1:0] instr1_prd,
+    input [PRF_WIDTH-1:0] instr2_prd,
+    input [PRF_WIDTH-1:0] instr3_prd,
     //第一个操作数
-    output [DATA_WIDTH-1:0] src0_alu0;
-    output [DATA_WIDTH-1:0] src0_alu1;
-    output [DATA_WIDTH-1:0] src0_mul;
-    output [DATA_WIDTH-1:0] src0_ls;
+    output [DATA_WIDTH-1:0] src0_alu0,
+    output [DATA_WIDTH-1:0] src0_alu1,
+    output [DATA_WIDTH-1:0] src0_mul,
+    output [DATA_WIDTH-1:0] src0_ls,
     //第二个操作数 
-    output [DATA_WIDTH-1:0] src1_alu0;
-    output [DATA_WIDTH-1:0] src1_alu1;
-    output [DATA_WIDTH-1:0] src1_mul;
-    output [DATA_WIDTH-1:0] src1_ls;    
+    output [DATA_WIDTH-1:0] src1_alu0,
+    output [DATA_WIDTH-1:0] src1_alu1,
+    output [DATA_WIDTH-1:0] src1_mul,
+    output [DATA_WIDTH-1:0] src1_ls    
 );
-reg [IQ_WIDTH-1:0] ciq [15:0]//16个表项的集中式发射队列
+reg [IQ_WIDTH-1:0] ciq [15:0];//16个表项的集中式发射队列
+
+//////////////////////分配电路(寻找发射队列空闲表项)//////////////////////////
+//发射队列空闲表项的地址
+wire [3:0] free0_addr;
+wire [3:0] free1_addr;
+wire [3:0] free2_addr;
+wire [3:0] free3_addr;
+//所在地址确实是空闲的
+wire free0_valid;
+wire free1_valid;
+wire free2_valid;
+wire free3_valid; 
+reg [15:0] ciq_free;//16个空闲标志位
+integer i;
+always@(*)begin
+    for(i=0;i<16;i=i+1)
+        ciq_free[i] = ciq[i][0];
+end
+allocation allocation_u0(
+    ciq_free,
+    //发射队列空闲表项的地址
+    free0_addr,
+    free1_addr,
+    free2_addr,
+    free3_addr,
+    //所在地址确实是空闲的
+    free0_valid,
+    free1_valid,
+    free2_valid,
+    free3_valid  
+);
+////////////////////////////////////////////////
+////////////////////发射队列////////////////////////
+module issue_queue#(
+    OPCODE,
+    PRF_WIDTH,
+    VALID,
+    READY,
+    ISSUED,
+    FREE,
+    AGE,
+    IQ_WIDTH
+)(
+    clk,
+    //指令的opcode
+    instr0_op,
+    instr1_op,
+    instr2_op,
+    instr3_op,
+    //指令是否有源操作数
+    instr0_prs1_v,
+    instr0_prs2_v,
+    instr1_prs1_v,
+    instr1_prs2_v,
+    instr2_prs1_v,
+    instr2_prs2_v,
+    instr3_prs1_v,
+    instr3_prs2_v,
+    //指令是否有目的寄存器
+    instr0_prd_v,
+    instr1_prd_v,
+    instr2_prd_v,
+    instr3_prd_v，   
+    //源寄存器的物理寄存器编号
+    instr0_prs1,
+    instr0_prs2,
+    instr1_prs1,
+    instr1_prs2,
+    instr2_prs1,
+    instr2_prs2,
+    instr3_prs1,
+    instr3_prs2,
+    //目的寄存器的物理寄存器编号
+    instr0_prd,
+    instr1_prd,
+    instr2_prd,
+    instr3_prd,
+    //唤醒电路得到的源寄存器ready信号
+    prs1_rdy,
+    prs1_rdy,
+    ciq [15:0]//16个表项的集中式发射队列
+);
+////////////////////////////////////////////////
+//////////////////////仲裁电路//////////////////////////
 wire [OPCODE_WIDTH-1:0] op [15:0];
 reg req [15:0];
 wire [AGE-1:0] age [15:0];
@@ -56,7 +173,7 @@ always@(*)begin
     for(i=0;i<16;i=i+1)
         req[i] = (~ciq[PRS1_V] | ciq[PRS1_RDY]) & (~ciq[PRS2_V] | ciq[PRS2_RDY]) & ~ciq[ISSUED];
 end
-//////////////////////仲裁电路//////////////////////////
+
 arbiter arbiter_u0#(
     .OP(`ALU),
     .OPCODE_WIDTH(7),
@@ -122,7 +239,7 @@ wake_up wake_up_u0#(
 )(
     .ciq_prd(ciq[PRD_MSB:PRD_LSB]),
     .ciq_prs1(ciq[PRS1_MSB:PRS1_LSB]),
-    .ciq_prs1(ciq[PRS2_MSB:PRS2_LSB]),
+    .ciq_prs2(ciq[PRS2_MSB:PRS2_LSB]),
     .addr_alu0(addr_alu0),
     .addr_alu1(addr_alu1),
     .addr_mul(addr_mul),
@@ -132,8 +249,8 @@ wake_up wake_up_u0#(
     .grant_mul(grant_mul),
     .grant_ls(grant_ls),
 
-    .prs1_rdy(),
-    .prs2_rdy()   
+    .prs1_rdy(prs1_rdy),
+    .prs2_rdy(prs2_rdy)   
 );
 //////////////////////////////////////////////////////
 endmodule
