@@ -10,9 +10,9 @@ module wake_up#(
     parameter PRS2_MSB
 )(
     //from issue_queue
-    input [PRF_WIDTH-1:0] arbit_prd[ISSUE_NUM-1:0],
-    input [PRF_WIDTH-1:0] ciq_prs1[CIQ_DEPTH-1:0],
-    input [PRF_WIDTH-1:0] ciq_prs2[CIQ_DEPTH-1:0],
+    input [PRF_WIDTH-1:0] arbit_prd[ISSUE_NUM-1:0],//被arbiter选中的指令的目的寄存器对应的物理寄存器编号
+    input [PRF_WIDTH-1:0] ciq_prs1[CIQ_DEPTH-1:0],//发射队列中所有指令的源寄存器1对应的物理寄存器编号
+    input [PRF_WIDTH-1:0] ciq_prs2[CIQ_DEPTH-1:0],//发射队列中所有指令的源寄存器2对应的物理寄存器编号
     //from arbiter
     input [ISSUE_NUM-1:0] arbit_grant,
     //to issue_queue
