@@ -1,5 +1,7 @@
 module wake_up#(
+    parameter ISSUE_NUM = 4,
     parameter PRF_WIDTH = 6,
+    parameter CIQ_DEPTH = 16,
     parameter PRD_LSB,
     parameter PRD_MSB,
     parameter PRS1_LSB,
@@ -7,35 +9,36 @@ module wake_up#(
     parameter PRS2_LSB,
     parameter PRS2_MSB
 )(
-    input [PRF_WIDTH-1:0] ciq_prd[15:0],
-    input [PRF_WIDTH-1:0] ciq_prs1[15:0],
-    input [PRF_WIDTH-1:0] ciq_prs2[15:0],
-    input [4:0] addr_alu0,
-    input [4:0] addr_alu1,
-    input [4:0] addr_mul,
-    input [4:0] addr_ls,
-    input grant_alu0,
-    input grant_alu1,
-    input grant_mul,
-    input grant_ls,
-
-    output reg prs1_rdy [15:0],
-    output reg prs2_rdy [15:0]    
+    //from issue_queue
+    input [PRF_WIDTH-1:0] arbit_prd[ISSUE_NUM-1:0],
+    input [PRF_WIDTH-1:0] ciq_prs1[CIQ_DEPTH-1:0],
+    input [PRF_WIDTH-1:0] ciq_prs2[CIQ_DEPTH-1:0],
+    //from arbiter
+    input [3:0] arbit_addr [ISSUE_NUM-1:0],
+    input [ISSUE_NUM-1:0] arbit_grant,
+    //to issue_queue
+    output reg prs1_rdy [CIQ_DEPTH-1:0],
+    output reg prs2_rdy [CIQ_DEPTH-1:0]    
 );
-wire [PRF_WIDTH-1:0] tag_bus0;
-wire [PRF_WIDTH-1:0] tag_bus1;
-wire [PRF_WIDTH-1:0] tag_bus2;
-wire [PRF_WIDTH-1:0] tag_bus3;
-assign tag_bus0 = grant_alu0 ? ciq_prd[addr_alu0] : tag_bus0;
-assign tag_bus1 = grant_alu1 ? ciq_prd[addr_alu1] : tag_bus1;
-assign tag_bus2 = grant_mul  ? ciq_prd[addr_mul]  : tag_bus2;
-assign tag_bus3 = grant_ls   ? ciq_prd[addr_ls]   : tag_bus3;
+wire [PRF_WIDTH-1:0] tag_bus [ISSUE_NUM-1:0];
 integer i;
 always@(*)begin
-    for(i=0;i<16;i=i+1)begin
-        prs1_rdy[i] = (tag_bus0 == ciq_prs1[i]) | (tag_bus1 == ciq_prs1[i]) | (tag_bus2 == ciq_prs1[i]) | (tag_bus3 == ciq_prs1[i]);
-        prs2_rdy[i] = (tag_bus0 == ciq_prs2[i]) | (tag_bus1 == ciq_prs2[i]) | (tag_bus2 == ciq_prs2[i]) | (tag_bus3 == ciq_prs2[i]);
+    for(i=0;i<ISSUE_NUM;i=i+1)begin
+        tag_bus[i] = arbit_grant[i] ? arbit_prd[i] : tag_bus[i];
     end
+end
+
+integer i,j;
+//比较bus上的寄存器编号和发射队列的源寄存器编号，相等则唤醒，ready置1
+always@(*)begin
+    for(i=0;i<CIQ_DEPTH;i=i+1)begin
+        for(j=0;j<ISSUE_NUM;j=i+1)begin
+            if(tag_bus[j] == ciq_prs1[i])
+                prs1_rdy[i] = 1'b1;
+            if(tag_bus[j] == ciq_prs1[i])
+                prs2_rdy[i] = 1'b1;
+        end
+    end         
 end
 
 endmodule
