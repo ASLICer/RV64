@@ -6,11 +6,13 @@ module issue_queue#(
     parameter PRF_WIDTH = 6,
     parameter VALID = 1,
     parameter READY = 1,
-    parameter ISSUED = 1,
-    parameter FREE = 1,
+    parameter ISSUED_WIDTH = 1,
+    parameter FREE_WIDTH = 1,
     parameter AGE = 5,
-    parameter IQ_WIDTH = OPCODE+3*PRF_WIDTH+3*VALID+2*READY+ISSUED+FREE+AGE,
+    parameter IQ_WIDTH = OPCODE+3*PRF_WIDTH+3*VALID+2*READY+ISSUED_WIDTH+FREE_WIDTH+AGE,
 
+    parameter FREE = 0,
+    parameter ISSUED = FREE+1,
     parameter PRS1_RDY,
     parameter PRS2_RDY
 )(
@@ -37,7 +39,7 @@ module issue_queue#(
 );
 
 
-//找到空闲表项将重命名后的指令写入发射队列
+//每个cycle找到空闲表项将重命名后的指令写入发射队列
 always@(posedge clk)begin
     for(i=0;i<INSTR_NUM;i=i+1)
         if(free_valid[i])
@@ -45,16 +47,16 @@ always@(posedge clk)begin
 end
 
 integer i,j;
-//根据仲裁电路结果更新issued信号
+//根据仲裁电路结果在下个cycle更新信号,被发射的指令issued=1,free=1，该指令下个cycle就可能被allocation分配的新指令替换
 always@(posedge clk)begin
     for(i=0;i<CIQ_DEPTH;i=i+1)begin
         for(j=0;j<ISSUE_NUM;j=j+1)begin
-            if(i == arbit_addr[j] && arbit_grant[j])
-                ciq[i][ISSUED] == 1'b1;//表明该指令已经被选择发射
+            if((i == arbit_addr[j]) && arbit_grant[j])
+                ciq[i][ISSUED:FREE] == 2'b11;//表明该指令已经被选择发射(先不考虑指令被仲裁后还停留在发射队列)
         end 
     end
 end
-//根据唤醒电路结果更新ready信号
+//根据唤醒电路结果在下个cycle更新ready信号，下个cycle就有机会被arbiter选中
 always@(posedge clk)begin
     for(i=0;i<CIQ_DEPTH;i=i+1)
         if(ciq[i][0] = 1'b0)begin//该表项不是空闲的
