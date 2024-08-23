@@ -1,4 +1,7 @@
 module issue#(
+    parameter INSTR_NUM = 4,
+    parameter ISSUE_NUM = 4,
+    parameter CIQ_DEPTH = 16,
     parameter OPCODE = 7,
     parameter PRF_WIDTH = 6,
     parameter VALID = 1,
@@ -29,84 +32,48 @@ module issue#(
 )(
     input clk,
     //指令的opcode
-    input [OPCODE-1:0] instr0_op,
-    input [OPCODE-1:0] instr1_op,
-    input [OPCODE-1:0] instr2_op,
-    input [OPCODE-1:0] instr3_op,
+    input [OPCODE-1:0] instr_op [INSTR_NUM-1:0],
     //指令是否有源寄存器操作数
-    input instr0_prs1_v,
-    input instr0_prs2_v,
-    input instr1_prs1_v,
-    input instr1_prs2_v,
-    input instr2_prs1_v,
-    input instr2_prs2_v,
-    input instr3_prs1_v,
-    input instr3_prs2_v,
+    input instr_prs1_v [INSTR_NUM-1:0],
+    input instr_prs2_v [INSTR_NUM-1:0],
     //指令是否有目的寄存器
-    input instr0_prd_v,
-    input instr1_prd_v,
-    input instr2_prd_v,
-    input instr3_prd_v，   
+    input instr_prd_v [INSTR_NUM-1:0],   
     //源寄存器的物理寄存器编号
-    input [PRF_WIDTH-1:0] instr0_prs1,
-    input [PRF_WIDTH-1:0] instr0_prs2,
-    input [PRF_WIDTH-1:0] instr1_prs1,
-    input [PRF_WIDTH-1:0] instr1_prs2,
-    input [PRF_WIDTH-1:0] instr2_prs1,
-    input [PRF_WIDTH-1:0] instr2_prs2,
-    input [PRF_WIDTH-1:0] instr3_prs1,
-    input [PRF_WIDTH-1:0] instr3_prs2,
+    input [PRF_WIDTH-1:0] instr_prs1 [INSTR_NUM-1:0],
+    input [PRF_WIDTH-1:0] instr_prs2 [INSTR_NUM-1:0],
     //目的寄存器的物理寄存器编号
-    input [PRF_WIDTH-1:0] instr0_prd,
-    input [PRF_WIDTH-1:0] instr1_prd,
-    input [PRF_WIDTH-1:0] instr2_prd,
-    input [PRF_WIDTH-1:0] instr3_prd,
+    input [PRF_WIDTH-1:0] instr_prd [INSTR_NUM-1:0],
     //第一个操作数
-    output [DATA_WIDTH-1:0] src0_alu0,
-    output [DATA_WIDTH-1:0] src0_alu1,
-    output [DATA_WIDTH-1:0] src0_mul,
-    output [DATA_WIDTH-1:0] src0_ls,
+    output [DATA_WIDTH-1:0] src0 [INSTR_NUM-1:0],
     //第二个操作数 
-    output [DATA_WIDTH-1:0] src1_alu0,
-    output [DATA_WIDTH-1:0] src1_alu1,
-    output [DATA_WIDTH-1:0] src1_mul,
-    output [DATA_WIDTH-1:0] src1_ls    
+    output [DATA_WIDTH-1:0] src1 [INSTR_NUM-1:0]   
 );
-reg [IQ_WIDTH-1:0] ciq [15:0];//16个表项的集中式发射队列
+reg [IQ_WIDTH-1:0] ciq [CIQ_DEPTH-1:0];//16个表项的集中式发射队列
 
 //////////////////////分配电路(寻找发射队列空闲表项)//////////////////////////
 //发射队列空闲表项的地址
-wire [3:0] free0_addr;
-wire [3:0] free1_addr;
-wire [3:0] free2_addr;
-wire [3:0] free3_addr;
+wire [3:0] free_addr [INSTR_NUM-1:0];
 //所在地址确实是空闲的
-wire free0_valid;
-wire free1_valid;
-wire free2_valid;
-wire free3_valid; 
-reg [15:0] ciq_free;//16个空闲标志位
+wire [INSTR_NUM-1:0] free_valid; 
+reg [CIQ_DEPTH-1:0] ciq_free;//16个空闲标志位
 integer i;
 always@(*)begin
-    for(i=0;i<16;i=i+1)
+    for(i=0;i<CIQ_DEPTH;i=i+1)
         ciq_free[i] = ciq[i][0];
 end
 allocation allocation_u0(
     ciq_free,
     //发射队列空闲表项的地址
-    free0_addr,
-    free1_addr,
-    free2_addr,
-    free3_addr,
+    free_addr,
     //所在地址确实是空闲的
-    free0_valid,
-    free1_valid,
-    free2_valid,
-    free3_valid  
+    free_valid  
 );
 ////////////////////////////////////////////////
 ////////////////////发射队列////////////////////////
-module issue_queue#(
+issue_queue issue_queue_u0#(
+    INSTR_NUM，
+    ISSUE_NUM,
+    CIQ_DEPTH,
     OPCODE,
     PRF_WIDTH,
     VALID,
@@ -118,112 +85,62 @@ module issue_queue#(
 )(
     clk,
     //指令的opcode
-    instr0_op,
-    instr1_op,
-    instr2_op,
-    instr3_op,
+    instr_op,
     //指令是否有源操作数
-    instr0_prs1_v,
-    instr0_prs2_v,
-    instr1_prs1_v,
-    instr1_prs2_v,
-    instr2_prs1_v,
-    instr2_prs2_v,
-    instr3_prs1_v,
-    instr3_prs2_v,
+    instr_prs1_v,
+    instr_prs2_v,
     //指令是否有目的寄存器
-    instr0_prd_v,
-    instr1_prd_v,
-    instr2_prd_v,
-    instr3_prd_v，   
+    instr_prd_v,   
     //源寄存器的物理寄存器编号
-    instr0_prs1,
-    instr0_prs2,
-    instr1_prs1,
-    instr1_prs2,
-    instr2_prs1,
-    instr2_prs2,
-    instr3_prs1,
-    instr3_prs2,
+    instr_prs1,
+    instr_prs2,
     //目的寄存器的物理寄存器编号
-    instr0_prd,
-    instr1_prd,
-    instr2_prd,
-    instr3_prd,
+    instr_prd,
+    //发射队列空闲表项的地址
+    free_addr,
+    //所在地址确实是空闲的
+    free_valid
     //唤醒电路得到的源寄存器ready信号
     prs1_rdy,
     prs1_rdy,
-    ciq [15:0]//16个表项的集中式发射队列
+    //16个表项的集中式发射队列
+    ciq
 );
 ////////////////////////////////////////////////
 //////////////////////仲裁电路//////////////////////////
-wire [OPCODE_WIDTH-1:0] op [15:0];
-reg req [15:0];
-wire [AGE-1:0] age [15:0];
-wire [4:0] addr_alu0;
-wire [4:0] addr_alu1;
-wire [4:0] addr_mul;
-wire [4:0] addr_ls;
-wire grant_alu0;
-wire grant_alu1;
-wire grant_mul;
-wire grant_ls;
-
+wire [OPCODE_WIDTH-1:0] op [CIQ_DEPTH-1:0];//发射队列所有表项的opcode
+reg  [CIQ_DEPTH-1:0] req;//发射队列所有表项的请求信号
+wire [AGE-1:0] age [CIQ_DEPTH-1:0];//发射队列所有表项的年龄
+wire [3:0] arbit_addr [ISSUE_NUM-1:0];//仲裁出的指令所在发射队列地址
+wire [ISSUE_NUM-1:0] arbit_grant;//仲裁出的结果是有效的
+wire [6:0] OP [ISSUE_NUM-1:0];
 always@(*)begin
-    for(i=0;i<16;i=i+1)
-        req[i] = (~ciq[PRS1_V] | ciq[PRS1_RDY]) & (~ciq[PRS2_V] | ciq[PRS2_RDY]) & ~ciq[ISSUED];
+    OP[0] = `ALU;
+    OP[1] = `ALU;
+    OP[2] = `MUL;
+    OP[3] = `LOAD;  
 end
-
-arbiter arbiter_u0#(
-    .OP(`ALU),
-    .OPCODE_WIDTH(7),
-    .REQ(1),
-    .AGE_WIDTH(5)
-)(
-    op(op),
-    req(req),
-    age(age),
-    grant(grant_alu0),
-    addr(addr_alu0)
-);//ALU0仲裁器
-arbiter arbiter_u0#(
-    .OP(`ALU),
-    .OPCODE_WIDTH(7),
-    .REQ(1),
-    .AGE_WIDTH(5)
-)(
-    op,
-    req,
-    op(op),
-    req(req),
-    age(age),
-    grant(grant_alu1),
-    addr(addr_alu1)
-);//ALU1仲裁器
-arbiter arbiter_u0#(
-    .OP(`MUL),
-    .OPCODE_WIDTH(7),
-    .REQ(1),
-    .AGE_WIDTH(5)
-)(
-    op(op),
-    req(req),
-    age(age),
-    grant(grant_mul),
-    addr(addr_mul)
-);//MUL仲裁器
-arbiter arbiter_u0#(
-    .OP(`LOAD_STORE),
-    .OPCODE_WIDTH(7),
-    .REQ(1),
-    .AGE_WIDTH(5)
-)(
-    op(op),
-    req(req),
-    age(age),
-    grant(grant_ls),
-    addr(addr_ls)
-);//LOAD_STORE仲裁器
+always@(*)begin
+    for(i=0;i<CIQ_DEPTH;i=i+1)
+        req[i] = (~ciq[PRS1_V] | ciq[PRS1_RDY]) & (~ciq[PRS2_V] | ciq[PRS2_RDY]) & ~ciq[ISSUED] & ~ciq[FREE];
+end
+genvar i;
+generate
+    for(i=0;i<ISSUE_NUM;i=i+1)begin:arbiter_group
+        arbiter arbiter_block#(
+            .OP(OP[i]),
+            .OPCODE_WIDTH(7),
+            .REQ(1),
+            .AGE_WIDTH(5)
+        )(
+            .op(op),
+            .req(req),
+            .age(age),
+            .grant(arbit_grant[i]),
+            .addr(arbit_addr[i])
+        );
+    end
+endgenerate
 //////////////////////////////////////////////////////
 ///////////////////唤醒电路/////////////////////////
 wire prs1_rdy [15:0];
