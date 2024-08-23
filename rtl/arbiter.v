@@ -27,7 +27,7 @@ reg [3:0] addr4 [3:0];
 reg [3:0] addr2 [1:0];
 reg [3:0] addr1;
 assign addr = addr1;
-assign grant = | req16;//至少16个请求中有一个有效
+assign grant = | req16;//16个请求中至少有一个有效
 integer i;
 always@(*)begin
     for(i=0;i<15;i=i+1)
