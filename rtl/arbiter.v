@@ -8,6 +8,7 @@ module arbiter#(
     input req [15:0],
     input [AGE-1:0] age [15:0],
 
+    output grant,//请求发射成功
     output [3:0] addr
 );//最小的年龄值对应最旧的指令
 //各级的有效请求
@@ -26,6 +27,7 @@ reg [3:0] addr4 [3:0];
 reg [3:0] addr2 [1:0];
 reg [3:0] addr1;
 assign addr = addr1;
+assign grant = | req16;//至少16个请求中有一个有效
 integer i;
 always@(*)begin
     for(i=0;i<15;i=i+1)
