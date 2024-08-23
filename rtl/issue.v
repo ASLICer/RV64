@@ -16,10 +16,12 @@ module issue#(
     parameter PRD_LSB = PRDV+1,
     parameter PRD_MSB = PRD_LSB+PRF_WIDTH-1,
     parameter PRS2_RDY = PRD_MSB+1,
-    parameter PRS2_LSB = PRS2_RDY+1,
+    parameter PRS2_V = PRS2_RDY,
+    parameter PRS2_LSB = PRS2_V+1,
     parameter PRS2_MSB = PRS2_LSB+PRF_WIDTH-1,
     parameter PRS1_RDY = PRS2_MSB+1,
-    parameter PRS1_LSB = PRS1_RDY+1,
+    parameter PRS1_V = PRS1_RDY+1,
+    parameter PRS1_LSB = PRS1_V+1,
     parameter PRS1_MSB = PRS1_LSB+PRF_WIDTH-1,  
     parameter OP_LSB = PRS1_MSB+1,
     parameter OP_MSB = OP_LSB+OPCODE_WIDTH-1,
@@ -37,7 +39,7 @@ module issue#(
     output [DATA_WIDTH-1:0] src1_mul;
     output [DATA_WIDTH-1:0] src1_ls;    
 );
-
+reg [IQ_WIDTH-1:0] ciq [15:0]//16个表项的集中式发射队列
 wire [OPCODE_WIDTH-1:0] op [15:0];
 reg req [15:0];
 wire [AGE-1:0] age [15:0];
@@ -48,7 +50,7 @@ wire [4:0] addr_ls;
 
 always@(*)begin
     for(i=0;i<16;i=i+1)
-        req[i] = 
+        req[i] = (~ciq[PRS1_V] | ciq[PRS1_RDY]) & (~ciq[PRS2_V] | ciq[PRS2_RDY]) & ~ciq[ISSUED];
 end
 arbiter arbiter_u0#(
     .OP(`ALU),
