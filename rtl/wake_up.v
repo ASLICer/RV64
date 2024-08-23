@@ -30,6 +30,7 @@ assign tag_bus0 = grant_alu0 ? ciq_prd[addr_alu0] : tag_bus0;
 assign tag_bus1 = grant_alu1 ? ciq_prd[addr_alu1] : tag_bus1;
 assign tag_bus2 = grant_mul  ? ciq_prd[addr_mul]  : tag_bus2;
 assign tag_bus3 = grant_ls   ? ciq_prd[addr_ls]   : tag_bus3;
+integer i;
 always@(*)begin
     for(i=0;i<16;i=i+1)begin
         prs1_rdy[i] = (tag_bus0 == ciq_prs1[i]) | (tag_bus1 == ciq_prs1[i]) | (tag_bus2 == ciq_prs1[i]) | (tag_bus3 == ciq_prs1[i]);
