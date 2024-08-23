@@ -42,39 +42,13 @@ module issue_queue#(
     input [PRF_WIDTH-1:0] instr1_prd,
     input [PRF_WIDTH-1:0] instr2_prd,
     input [PRF_WIDTH-1:0] instr3_prd,
-
+    //唤醒电路得到的源寄存器ready信号
+    input prs1_rdy [15:0],
+    input prs2_rdy [15:0],
     output reg [IQ_WIDTH-1:0] ciq [15:0]//16个表项的集中式发射队列
 );
 
-//发射队列空闲表项的地址
-wire [3:0] free0_addr;
-wire [3:0] free1_addr;
-wire [3:0] free2_addr;
-wire [3:0] free3_addr;
-//所在地址确实是空闲的
-wire free0_valid;
-wire free1_valid;
-wire free2_valid;
-wire free3_valid; 
-wire [15:0] ciq_free;//16个空闲标志位
-integer i;
-always@(*)begin
-    for(i=0;i<16;i=i+1)
-        ciq_free[i] = ciq[i][0];
-end
-allocation allocation_u0(
-    ciq_free,
-    //发射队列空闲表项的地址
-    free0_addr,
-    free1_addr,
-    free2_addr,
-    free3_addr,
-    //所在地址确实是空闲的
-    free0_valid,
-    free1_valid,
-    free2_valid,
-    free3_valid  
-);
+
 //找到4个空闲表项写入指令
 always@(posedge clk)begin
     if(free0_valid)
