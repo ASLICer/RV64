@@ -19,8 +19,8 @@ module wake_up#(
     input grant_mul,
     input grant_ls,
 
-    output prs1_rdy [15:0],
-    output prs2_rdy [15:0]    
+    output reg prs1_rdy [15:0],
+    output reg prs2_rdy [15:0]    
 );
 wire [PRF_WIDTH-1:0] tag_bus0;
 wire [PRF_WIDTH-1:0] tag_bus1;
