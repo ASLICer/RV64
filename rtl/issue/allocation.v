@@ -1,10 +1,10 @@
 module allocation#(
-    parameter INSTR_NUM = 4,
+    parameter DECODE_NUM = 4,
     parameter CIQ_DEPTH = 16
 )(
     input [CIQ_DEPTH-1:0] ciq_free,//16个空闲标志位   
-    output [3:0] free_addr [INSTR_NUM-1:0],//发射队列空闲表项的地址
-    output [INSTR_NUM-1:0] free_valid//所在地址确实是空闲的   
+    output [3:0] free_addr [DECODE_NUM-1:0],//发射队列空闲表项的地址
+    output [DECODE_NUM-1:0] free_valid//所在地址确实是空闲的   
 );
 assign free_addr[0] = first_c0 ;
 assign free_addr[1] = second_c0;

@@ -1,123 +1,210 @@
 module rename#(
-    parameter PRF_WIDTH = 6 
+	parameter ARF_WIDTH = 5,
+    parameter PRF_WIDTH = 6,
+	parameter DECODE_NUM = 4
 )(  
     input clk,
+	input rst,
     //源寄存器的逻辑寄存器编号
-    input [4:0] instr0_rs1,
-    input [4:0] instr0_rs2,
-    input [4:0] instr1_rs1,
-    input [4:0] instr1_rs2,
-    input [4:0] instr2_rs1,
-    input [4:0] instr2_rs2,
-    input [4:0] instr3_rs1,
-    input [4:0] instr3_rs2,
+    input [ARF_WIDTH-1:0] instr0_rs1,
+    input [ARF_WIDTH-1:0] instr0_rs2,
+    input [ARF_WIDTH-1:0] instr1_rs1,
+    input [ARF_WIDTH-1:0] instr1_rs2,
+    input [ARF_WIDTH-1:0] instr2_rs1,
+    input [ARF_WIDTH-1:0] instr2_rs2,
+    input [ARF_WIDTH-1:0] instr3_rs1,
+    input [ARF_WIDTH-1:0] instr3_rs2,
     //目的寄存器的逻辑寄存器编号
-    input [4:0] instr0_rd,
-    input [4:0] instr1_rd,
-    input [4:0] instr2_rd,
-    input [4:0] instr3_rd,
+    input [ARF_WIDTH-1:0] instr0_rd,
+    input [ARF_WIDTH-1:0] instr1_rd,
+    input [ARF_WIDTH-1:0] instr2_rd,
+    input [ARF_WIDTH-1:0] instr3_rd,
+
+	input  [DECODE_NUM-1:0]instr_prs1_v,//指令是否有来自源寄存器1操作数
+    input  [DECODE_NUM-1:0]instr_prs2_v,//指令是否有来自源寄存器2操作数  
+    input  [3:0]instr_prd_v,//指令是否有目的寄存器
     //源寄存器的物理寄存器编号
-    output [5:0] instr0_prs1,
-    output [5:0] instr0_prs2,
-    output [5:0] instr1_prs1,
-    output [5:0] instr1_prs2,
-    output [5:0] instr2_prs1,
-    output [5:0] instr2_prs2,
-    output [5:0] instr3_prs1,
-    output [5:0] instr3_prs2,
+    output [PRF_WIDTH-1:0] instr0_prs1,
+    output [PRF_WIDTH-1:0] instr0_prs2,
+    output [PRF_WIDTH-1:0] instr1_prs1,
+    output [PRF_WIDTH-1:0] instr1_prs2,
+    output [PRF_WIDTH-1:0] instr2_prs1,
+    output [PRF_WIDTH-1:0] instr2_prs2,
+    output [PRF_WIDTH-1:0] instr3_prs1,
+    output [PRF_WIDTH-1:0] instr3_prs2,
     //目的寄存器的物理寄存器编号
-    output [5:0] instr0_prd,
-    output [5:0] instr1_prd,
-    output [5:0] instr2_prd,
-    output [5:0] instr3_prd， 
+    output [PRF_WIDTH-1:0] instr0_prd,
+    output [PRF_WIDTH-1:0] instr1_prd,
+    output [PRF_WIDTH-1:0] instr2_prd,
+    output [PRF_WIDTH-1:0] instr3_prd, 
     //目的寄存器的旧物理寄存器编号
-    output [5:0] instr0_preprd,
-    output [5:0] instr1_preprd,
-    output [5:0] instr2_preprd,
-    output [5:0] instr3_preprd   
+    output [PRF_WIDTH-1:0] instr0_preprd,
+    output [PRF_WIDTH-1:0] instr1_preprd,
+    output [PRF_WIDTH-1:0] instr2_preprd,
+    output [PRF_WIDTH-1:0] instr3_preprd   
 );
-reg [5:0] rat [31:0]；//重命名映射表
-reg [5:0] freelist [63:0];//空闲列表,FIFO实现
-reg [5:0] fl_raddr;//freelist的读地址
+reg [PRF_WIDTH-1:0] rat [31:0];//重命名映射表
+reg [PRF_WIDTH-1:0] freelist [31:0];//空闲列表,FIFO实现(64个物理寄存器最多有32空闲，32个在RAT存在映射关系)
+reg [2:0] free_num;//需要的空闲寄存器个数
+reg [4:0] fl_addr_before;//freelist未加上free_num的读地址（上周期freelist分配后的读地址）
+wire [4:0] fl_addr_after;//freelist加上free_num的读地址（本周期freelist分配后的读地址）
 //从RAT中读取的源寄存器的物理寄存器编号(由于相关性，不一定是正确的)
-reg [5:0] instr0_rat_prs1;
-reg [5:0] instr0_rat_prs2;
-reg [5:0] instr1_rat_prs1;
-reg [5:0] instr1_rat_prs2;
-reg [5:0] instr2_rat_prs1;
-reg [5:0] instr2_rat_prs2;
-reg [5:0] instr3_rat_prs1;
-reg [5:0] instr3_rat_prs2;
+reg [PRF_WIDTH-1:0] instr0_rat_prs1;
+reg [PRF_WIDTH-1:0] instr0_rat_prs2;
+reg [PRF_WIDTH-1:0] instr1_rat_prs1;
+reg [PRF_WIDTH-1:0] instr1_rat_prs2;
+reg [PRF_WIDTH-1:0] instr2_rat_prs1;
+reg [PRF_WIDTH-1:0] instr2_rat_prs2;
+reg [PRF_WIDTH-1:0] instr3_rat_prs1;
+reg [PRF_WIDTH-1:0] instr3_rat_prs2;
 
-always@(posedge clk)begin
+
+assign fl_addr_after = fl_addr_before + free_num;
+integer i;
+
+always@(instr_prd_v or rst) begin
+	if(rst)
+		free_num = 1'b0;
+    else begin 
+		free_num = 1'b0;
+    	for(i=0;i<4;i=i+1)
+			free_num = free_num + instr_prd_v[i];
+	end
+end
+
+always@(posedge clk or posedge rst)begin
+	if(rst)
+		fl_addr_before = 0;
+	else
+		fl_addr_before = fl_addr_after;
+		
+end
+//assign fl_addr_before = rst ? 1'b0 : (fl_addr_before+free_num);
+always@(posedge clk or posedge rst)begin
     if(rst)
-        fl_raddr <= 1'b0;
-    else
-        fl_raddr <= fl_raddr+4;
+        for(i=0;i<32;i=i+1)//复位后0-31已经在RAT中有映射关系，32-63物理寄存器都是空闲的
+			freelist[i] <= i+32;
+
 end
 
-//从RAT中读取目的寄存器对应的的旧物理寄存器编号(由于WAW相关性，不一定是正确的,可能来源于上一条指令的目的寄存器的物理寄存器)
-reg [5:0] instr0_rat_preprd;
-reg [5:0] instr1_rat_preprd;
-reg [5:0] instr2_rat_preprd;
-reg [5:0] instr3_rat_preprd;
-
-always@(posedge clk)begin
-    instr0_rat_preprd <= rat[instr0_rd];
-    instr1_rat_preprd <= rat[instr1_rd];
-    instr2_rat_preprd <= rat[instr2_rd];
-    instr3_rat_preprd <= rat[instr3_rd];    
-end
-//输出真正的旧映射关系
-assign instr0_preprd = instr0_rat_preprd;//指令0的旧映射关系只能来源于RAT
-assign instr1_preprd = (instr1_rd == instr0_rd) ? instr0_fl_prd : instr1_rat_preprd;
-assign instr2_preprd = (instr2_rd == instr1_rd) ? instr1_fl_prd : 
-                       (instr2_rd == instr0_rd) ? instr0_fl_prd : instr2_rat_preprd;
-assign instr3_preprd = (instr3_rd == instr2_rd) ? instr2_fl_prd :
-                       (instr3_rd == instr1_rd) ? instr1_fl_prd : 
-                       (instr3_rd == instr0_rd) ? instr0_fl_prd : instr3_rat_preprd;
-
-//从RAT中读取源寄存器对应的的物理寄存器编号
-always@(posedge clk)begin
-    instr0_rat_prs1 <= rat[instr0_rs1];
-    instr0_rat_prs2 <= rat[instr0_rs2];
-    instr1_rat_prs1 <= rat[instr1_rs1];
-    instr1_rat_prs2 <= rat[instr1_rs2];
-    instr2_rat_prs1 <= rat[instr2_rs1];
-    instr2_rat_prs2 <= rat[instr2_rs2];
-    instr3_rat_prs1 <= rat[instr3_rs1];
-    instr3_rat_prs2 <= rat[instr3_rs2];
-end
 //从空闲列表中找到空闲的物理寄存器，作为指令的目的寄存器对应的物理寄存器(由于WAW相关性，不一定是正确的)
 //组合逻辑读freelist,因为读完后还要写新的映射关系进RAT(上升沿写入)
 //整个过程在一个周期内完成
-reg [5:0] instr0_fl_prd;
-reg [5:0] instr1_fl_prd;
-reg [5:0] instr2_fl_prd;
-reg [5:0] instr3_fl_prd;
-always@(*)begin
-    instr0_fl_prd = freelist[fl_raddr];
-    instr1_fl_prd = freelist[fl_raddr+1];
-    instr2_fl_prd = freelist[fl_raddr+2];
-    instr3_fl_prd = freelist[fl_raddr+3];
-end
-//目的寄存器的物理寄存器编号就是从空闲列表找到空闲的物理寄存器编号
-assign instr0_prd = instr0_fl_prd;
-assign instr1_prd = instr1_fl_prd;
-assign instr2_prd = instr2_fl_prd;
-assign instr3_prd = instr3_fl_prd;
-//向RAT中写入新的映射关系(目的寄存器对应的新的物理寄存器,若出现WAW相关性,只需写入最新的映射关系)
+reg [PRF_WIDTH-1:0] instr0_fl_prd;
+reg [PRF_WIDTH-1:0] instr1_fl_prd;
+reg [PRF_WIDTH-1:0] instr2_fl_prd;
+reg [PRF_WIDTH-1:0] instr3_fl_prd;
+//上升沿读，因为要与从RAT读取的源寄存器对应的物理寄存器编号同步
+//由于可能出现RAW，需要从两者中选取一个作为真正的源寄存器对应的物理寄存器编号
 always@(posedge clk)begin
-    if((instr0_rd != instr1_rd) && (instr0_rd != instr2_rd) && (instr0_rd != instr3_rd))
-        rat[instr0_rd] <= instr0_fl_prd;
-    if((instr1_rd != instr2_rd) && (instr1_rd != instr3_rd))
-        rat[instr1_rd] <= instr1_fl_prd;
-    if((instr2_rd != instr3_rd))
-        rat[instr2_rd] <= instr2_fl_prd;
-    //指令3的新映射关系一定会被写入
-    rat[instr3_rd] <= instr3_fl_prd;
+	case(free_num)
+    	1:	instr0_fl_prd <= freelist[fl_addr_after];
+    	2:	begin
+				instr0_fl_prd <= freelist[fl_addr_after-1];
+				instr1_fl_prd <= freelist[fl_addr_after];
+			end
+    	3:	begin
+				instr0_fl_prd <= freelist[fl_addr_after-2];
+				instr1_fl_prd <= freelist[fl_addr_after-1];
+				instr2_fl_prd <= freelist[fl_addr_after];
+			end
+    	4:	begin
+				instr0_fl_prd <= freelist[fl_addr_after-3];
+				instr1_fl_prd <= freelist[fl_addr_after-2];
+				instr2_fl_prd <= freelist[fl_addr_after-1];
+				instr3_fl_prd <= freelist[fl_addr_after];
+			end	
+	endcase
 end
-//RAW相关性检查(后面指令的源寄存器是否等于前面指令的目的寄存器)
+//从RAT中读取目的寄存器对应的的旧物理寄存器编号
+//由于WAW相关性，不一定是正确的,可能来源于上一条指令的目的寄存器的物理寄存器
+//也可能不存在目的寄存器，不读取RAT或者忽略掉读取的结果
+reg [PRF_WIDTH-1:0] instr0_rat_preprd;
+reg [PRF_WIDTH-1:0] instr1_rat_preprd;
+reg [PRF_WIDTH-1:0] instr2_rat_preprd;
+reg [PRF_WIDTH-1:0] instr3_rat_preprd;
+
+always@(posedge clk)begin//存在目的寄存器才读，否则保持不变节省功耗
+    instr0_rat_preprd <= instr_prd_v[0] ? rat[instr0_rd] : instr0_rat_preprd;
+    instr1_rat_preprd <= instr_prd_v[1] ? rat[instr1_rd] : instr1_rat_preprd;
+    instr2_rat_preprd <= instr_prd_v[2] ? rat[instr2_rd] : instr2_rat_preprd;
+    instr3_rat_preprd <= instr_prd_v[3] ? rat[instr3_rd] : instr3_rat_preprd;    
+end
+//输出真正的旧映射关系（若不存在目的寄存器，忽略掉该结果，保持不变节省功耗）
+//assign instr0_preprd = instr_prd_v[0] ? instr0_rat_preprd : instr0_preprd;//指令0的旧映射关系只能来源于RAT
+//assign instr1_preprd = ((instr1_rd == instr0_rd) & ( instr_prd_v[0] & instr_prd_v[1])) ? instr0_fl_prd : 
+//												   (~instr_prd_v[0] & instr_prd_v[1])  ? instr1_rat_preprd : instr1_preprd;
+//assign instr2_preprd = ((instr2_rd == instr1_rd) & ( instr_prd_v[1] & instr_prd_v[2])) ? instr1_fl_prd : 
+//                       ((instr2_rd == instr0_rd) & ( instr_prd_v[0] & instr_prd_v[2])) ? instr0_fl_prd : 
+//					   			  (~instr_prd_v[0] & ~instr_prd_v[1] & instr_prd_v[2]) ? instr2_rat_preprd : instr2_preprd;
+//assign instr3_preprd = ((instr3_rd == instr2_rd) & ( instr_prd_v[2] & instr_prd_v[3])) ? instr2_fl_prd :
+//                       ((instr3_rd == instr1_rd) & ( instr_prd_v[1] & instr_prd_v[3])) ? instr1_fl_prd : 
+//                       ((instr3_rd == instr0_rd) & ( instr_prd_v[0] & instr_prd_v[3])) ? instr0_fl_prd : 
+//					   (~instr_prd_v[0] & ~instr_prd_v[1] & ~instr_prd_v[2] & instr_prd_v[3]) ? instr3_rat_preprd : instr3_preprd;
+
+assign instr0_preprd = instr_prd_v[0] ? instr0_rat_preprd : instr0_preprd;//指令0的旧映射关系只能来源于RAT
+assign instr1_preprd = ((instr1_rd == instr0_rd) & ( instr_prd_v[0] & instr_prd_v[1])) ? instr0_fl_prd : //指令1的目的寄存器和指令0相同(且两者存在目的寄存器)
+												   					  instr_prd_v[1]   ? instr1_rat_preprd : instr1_preprd;
+assign instr2_preprd = ((instr2_rd == instr1_rd) & ( instr_prd_v[1] & instr_prd_v[2])) ? instr1_fl_prd : //指令2的目的寄存器和指令1相同(且两者存在目的寄存器)
+                       ((instr2_rd == instr0_rd) & ( instr_prd_v[0] & instr_prd_v[2])) ? instr0_fl_prd : //指令2的目的寄存器和指令0相同(且两者存在目的寄存器)
+					   			  										instr_prd_v[2] ? instr2_rat_preprd : instr2_preprd;
+assign instr3_preprd = ((instr3_rd == instr2_rd) & ( instr_prd_v[2] & instr_prd_v[3])) ? instr2_fl_prd : //指令3的目的寄存器和指令2相同(且两者存在目的寄存器)
+                       ((instr3_rd == instr1_rd) & ( instr_prd_v[1] & instr_prd_v[3])) ? instr1_fl_prd : //指令3的目的寄存器和指令1相同(且两者存在目的寄存器)
+                       ((instr3_rd == instr0_rd) & ( instr_prd_v[0] & instr_prd_v[3])) ? instr0_fl_prd : //指令3的目的寄存器和指令0相同(且两者存在目的寄存器)
+					   													instr_prd_v[3] ? instr3_rat_preprd : instr3_preprd;
+//从RAT中读取源寄存器对应的物理寄存器编号
+//由于RAW相关性，不一定是正确的,可能来源于上一条指令的目的寄存器的物理寄存器
+//也可能不存在源寄存器，不读取RAT或者忽略掉读取的结果
+always@(posedge clk)begin
+    instr0_rat_prs1 <= instr_prs1_v[0] ? rat[instr0_rs1] : instr0_rat_prs1;
+    instr0_rat_prs2 <= instr_prs2_v[0] ? rat[instr0_rs2] : instr0_rat_prs2;
+    instr1_rat_prs1 <= instr_prs1_v[1] ? rat[instr1_rs1] : instr1_rat_prs1;
+    instr1_rat_prs2 <= instr_prs2_v[1] ? rat[instr1_rs2] : instr1_rat_prs2;
+    instr2_rat_prs1 <= instr_prs1_v[2] ? rat[instr2_rs1] : instr2_rat_prs1;
+    instr2_rat_prs2 <= instr_prs2_v[2] ? rat[instr2_rs2] : instr2_rat_prs2;
+    instr3_rat_prs1 <= instr_prs1_v[3] ? rat[instr3_rs1] : instr3_rat_prs1;
+    instr3_rat_prs2 <= instr_prs2_v[3] ? rat[instr3_rs2] : instr3_rat_prs2;
+end
+//目的寄存器的物理寄存器编号就是从空闲列表找到空闲的物理寄存器编号(某些指令没有目的寄存器)
+assign instr0_prd = instr_prd_v[0] ? instr0_fl_prd : instr0_prd;
+assign instr1_prd = ( instr_prd_v[0] & instr_prd_v[1]) ? instr1_fl_prd :
+					(~instr_prd_v[0] & instr_prd_v[1]) ? instr0_fl_prd : instr1_prd;
+assign instr2_prd = ((instr_prd_v[1:0] == 2'b11) & instr_prd_v[2]) ? instr2_fl_prd :
+					((^instr_prd_v[1:0])  		 & instr_prd_v[2]) ? instr1_fl_prd : 
+					((|instr_prd_v[1:0])  		 & instr_prd_v[2]) ? instr0_fl_prd : instr2_prd;
+assign instr3_prd = ((instr_prd_v[2:0] == 3'b111) & instr_prd_v[3]) ? instr3_fl_prd :
+					((instr_prd_v[2:0] == 3'b110 | instr_prd_v[2:0] == 3'b101 | instr_prd_v[2:0] == 3'b011) & instr_prd_v[3]) ? instr2_fl_prd :
+					((instr_prd_v[2:0] == 3'b100 | instr_prd_v[2:0] == 3'b010 | instr_prd_v[2:0] == 3'b001) & instr_prd_v[3]) ? instr1_fl_prd : 
+					((instr_prd_v[2:0] == 3'b000) & instr_prd_v[3]) ? instr0_fl_prd : instr3_prd;
+
+
+//向RAT中写入新的映射关系(目的寄存器对应的新的物理寄存器)
+//存在目的寄存器才需要写入新的映射关系
+//若出现WAW相关性,只需写入最新的映射关系
+always@(negedge clk or posedge rst)begin//上升沿读，下降沿写，保证下周期上升沿能够读到本cycle的写入的映射关系
+	if(rst)begin
+		for(i=0;i<32;i=i+1)
+			rat[i] <= i;
+	end
+	else begin
+		if(instr_prd_v[0])begin//指令1/指令2/指令3的目的寄存器和指令0的目的寄存器相同，则指令0不写RAT
+			if(~(((instr0_rd == instr1_rd) && instr_prs1_v[1]) | ((instr0_rd == instr2_rd) && instr_prs1_v[2]) | ((instr0_rd == instr3_rd) && instr_prs1_v[3])))
+    	    	rat[instr0_rd] <= instr0_prd ;
+		end
+		if(instr_prd_v[1])begin//指令2/指令3的目的寄存器和指令1的目的寄存器相同，则指令1不写RAT
+			if(~(((instr1_rd == instr2_rd) && instr_prs1_v[2]) | ((instr1_rd == instr3_rd) && instr_prs1_v[3])))
+    	    	rat[instr1_rd] <= instr1_prd ;
+		end
+		if(instr_prd_v[2])begin//指令3的目的寄存器和指令2的目的寄存器相同，则指令2不写RAT
+			if(~((instr2_rd == instr3_rd) && instr_prs1_v[3]))
+    	    	rat[instr2_rd] <= instr2_prd ;
+		end
+    	if(instr_prd_v[3])//指令3只要存在目的寄存器，指令3的新映射关系一定会被写入
+    		rat[instr3_rd] <= instr3_prd;
+	end
+end
+
+//RAW相关性检查(后面指令的源寄存器是否等于前面指令的目的寄存器)比较的是逻辑寄存器
 //第一条指令的源寄存器对应的物理寄存器只能来自RAT
 //最后一条指令的目的寄存器来自于空闲列表，不可能作为其他指令的源寄存器
 wire raw1_rs1,raw1_rs2;
@@ -125,40 +212,53 @@ wire [1:0] raw2_rs1,raw2_rs2;
 wire [2:0] raw3_rs1,raw3_rs2;
 //指令1与指令0相关性
 //指令1的源寄存器=指令0的目的寄存器，1
-assign raw1_rs1 = (instr1_rat_prs1 == instr0_fl_prd);
-assign raw1_rs2 = (instr1_rat_prs2 == instr0_fl_prd);
+assign raw1_rs1 = ((instr1_rs1 == instr0_rd) & (instr_prs1_v[1] & instr_prd_v[0]));//指令1存在源寄存器1 & 指令0存在目的寄存器
+assign raw1_rs2 = ((instr1_rs2 == instr0_rd) & (instr_prs2_v[1] & instr_prd_v[0]));//指令1存在源寄存器2 & 指令0存在目的寄存器
 //指令2与指令0/指令1相关性
 //指令2的源寄存器=指令0的目的寄存器，01
 //指令2的源寄存器=指令1的目的寄存器，10
 //指令2的源寄存器=指令0和指令1的目的寄存器，11
-assign raw2_rs1 = {(instr2_rat_prs1 == instr1_fl_prd),(instr2_rat_prs1 == instr0_fl_prd)};
-assign raw2_rs2 = {(instr2_rat_prs2 == instr1_fl_prd),(instr2_rat_prs2 == instr0_fl_prd)};
+assign raw2_rs1 = {((instr2_rs1 == instr1_rd) & (instr_prs1_v[2] & instr_prd_v[1])),((instr2_rs1 == instr0_rd) & (instr_prs1_v[2] & instr_prd_v[0]))};
+assign raw2_rs2 = {((instr2_rs2 == instr1_rd) & (instr_prs2_v[2] & instr_prd_v[1])),((instr2_rs2 == instr0_rd) & (instr_prs2_v[2] & instr_prd_v[0]))};
 //指令3与指令0/指令1/指令2相关性
 //指令3的源寄存器=指令0的目的寄存器，001
-//指令3的源寄存器=指令1的目的寄存器，010
-//指令3的源寄存器=指令2的目的寄存器，100
+//指令3的源寄存器=指令1的目的寄存器，01x
+//指令3的源寄存器=指令2的目的寄存器，1xx
 //其他情况~~~
-assign raw3_rs1 = {(instr3_rat_prs1 == instr2_fl_prd),(instr3_rat_prs1 == instr1_fl_prd),(instr3_rat_prs1 == instr0_fl_prd)};
-assign raw3_rs2 = {(instr3_rat_prs2 == instr2_fl_prd),(instr3_rat_prs2 == instr1_fl_prd),(instr3_rat_prs2 == instr0_fl_prd)};
+assign raw3_rs1 = {((instr3_rs1 == instr2_rd) & (instr_prs1_v[3] & instr_prd_v[2])),((instr3_rs1 == instr1_rd) & (instr_prs1_v[3] & instr_prd_v[1])),((instr3_rs1 == instr0_rd) & (instr_prs1_v[3] & instr_prd_v[0]))};
+assign raw3_rs2 = {((instr3_rs2 == instr2_rd) & (instr_prs2_v[3] & instr_prd_v[2])),((instr3_rs2 == instr1_rd) & (instr_prs2_v[3] & instr_prd_v[1])),((instr3_rs2 == instr0_rd) & (instr_prs2_v[3] & instr_prd_v[0]))};
 
 //选择源寄存器对应的物理寄存器输出
-//指令0
+//指令0因为是第一条指令，源寄存器对应的物理寄存器编号只能是RAT中读取的值
 assign instr0_prs1 = instr0_rat_prs1;
 assign instr0_prs2 = instr0_rat_prs2;
-//指令1
+//指令1与指令0存在RAW，说明指令0存在目的寄存器，即指令0必用了一个空闲寄存器
 assign instr1_prs1 = raw1_rs1 ? instr0_fl_prd : instr1_rat_prs1;
 assign instr1_prs2 = raw1_rs2 ? instr0_fl_prd : instr1_rat_prs2;
-//指令2
-assign instr2_prs1 = raw2_rs1[1] ? instr1_fl_prd : 
-                     raw2_rs1[0] ? instr0_fl_prd : instr2_rat_prs1;
-assign instr2_prs2 = raw2_rs2[1] ? instr1_fl_prd : 
-                     raw2_rs2[0] ? instr0_fl_prd : instr2_rat_prs2; 
+//指令2(需要判断前面用了多少空闲寄存器)
+assign instr2_prs1 = (raw2_rs1[1] &  instr_prd_v[0]) ? instr1_fl_prd : //指令2和指令1存在RAW & 指令0由于存在目的寄存器，用了一个空闲寄存器
+                     (raw2_rs1[1] & ~instr_prd_v[0]) ? instr0_fl_prd : //指令2和指令1存在RAW & 指令0不存在目的寄存器
+										 raw2_rs1[0] ? instr0_fl_prd : //指令2只和指令0存在RAW
+													   instr2_rat_prs1;//指令2和指令0、指令0都不存在RAW
+assign instr2_prs2 = (raw2_rs2[1] &  instr_prd_v[0]) ? instr1_fl_prd : //指令2和指令1存在RAW & 指令0由于存在目的寄存器，用了一个空闲寄存器
+                     (raw2_rs2[1] & ~instr_prd_v[0]) ? instr0_fl_prd : //指令2和指令1存在RAW & 指令0不存在目的寄存器
+										 raw2_rs2[0] ? instr0_fl_prd : //指令2只和指令0存在RAW
+													   instr2_rat_prs2;//指令2和指令0、指令1都不存在RAW
 //指令3 
-assign instr3_prs1 = raw3_rs1[2] ? instr2_fl_prd :
-                     raw3_rs1[1] ? instr1_fl_prd : 
-                     raw3_rs1[0] ? instr0_fl_prd : instr3_rat_prs1; 
-assign instr3_prs2 = raw3_rs2[2] ? instr2_fl_prd :
-                     raw3_rs2[1] ? instr1_fl_prd : 
-                     raw3_rs2[0] ? instr0_fl_prd : instr3_rat_prs2;   
+assign instr3_prs1 = (raw3_rs1[2] & (instr_prd_v[1:0] == 2'b11)) ? instr2_fl_prd ://指令3和指令2存在RAW & 指令1和指令0由于存在目的寄存器，用了两个空闲寄存器
+                     (raw3_rs1[2] & (instr_prd_v[1:0] != 2'b00)) ? instr1_fl_prd ://指令3和指令2存在RAW & 指令1或指令0由于存在目的寄存器，用了一个空闲寄存器 
+                     (raw3_rs1[2] & (instr_prd_v[1:0] == 2'b00)) ? instr0_fl_prd ://指令3和指令2存在RAW & 指令1和指令0不存在目的寄存器
+					 (raw3_rs1[1] &  instr_prd_v[0]) ? instr1_fl_prd : //指令3和指令1存在RAW & 指令0由于存在目的寄存器，用了一个空闲寄存器
+                     (raw3_rs1[1] & ~instr_prd_v[0]) ? instr0_fl_prd : //指令3和指令1存在RAW & 指令0不存在目的寄存器
+										 raw3_rs1[0] ? instr0_fl_prd : //指令3只和指令0存在RAW
+										 			   instr3_rat_prs1;//指令3和指令0、指令1、指令2都不存在RAW
+
+assign instr3_prs2 = (raw3_rs2[2] & (instr_prd_v[1:0] == 2'b11)) ? instr2_fl_prd ://指令3和指令2存在RAW & 指令1和指令0由于存在目的寄存器，用了两个空闲寄存器
+                     (raw3_rs2[2] & (instr_prd_v[1:0] != 2'b00)) ? instr1_fl_prd ://指令3和指令2存在RAW & 指令1或指令0由于存在目的寄存器，用了一个空闲寄存器 
+                     (raw3_rs2[2] & (instr_prd_v[1:0] == 2'b00)) ? instr0_fl_prd ://指令3和指令2存在RAW & 指令1和指令0不存在目的寄存器
+					 (raw3_rs2[1] &  instr_prd_v[0]) ? instr1_fl_prd : //指令3和指令1存在RAW & 指令0由于存在目的寄存器，用了一个空闲寄存器
+                     (raw3_rs2[1] & ~instr_prd_v[0]) ? instr0_fl_prd : //指令3和指令1存在RAW & 指令0不存在目的寄存器
+										 raw3_rs2[0] ? instr0_fl_prd : //指令3只和指令0存在RAW
+										 			   instr3_rat_prs2;//指令3和指令0、指令1、指令2都不存在RAW    
                                                                              
 endmodule

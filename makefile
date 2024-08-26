@@ -32,9 +32,25 @@ ver : com sim run_verdi
 dve : com sim run_dve
 cs: com sim
 
+vca: cache 
+	verdi -sv  I_cache.v tb_cache.v ./rtl/instr_memory.v \
+	-ssf test.fsdb &
 cache:
-	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns I_cache.v -l com.log
+	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns \
+	I_cache.v tb_cache.v ./rtl/instr_memory.v \
+	-l com.log
 	make sim
+vrename: rename
+	verdi -sv  ./rtl/rename.v ./test/tb_rename.v  \
+	-ssf test.fsdb &
+rename:
+	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns \
+	 ./rtl/rename.v ./test/tb_rename.v \
+	-l com.log
+	make sim
+
+
+
 com:
 	vcs -sverilog \
 	-full64 \
@@ -56,7 +72,7 @@ run_verdi:
 	verdi -sv -f filelist -ssf test.fsdb &
 
 clean:
-	rm -rf *.vpd csrc *.log *.key *.vdb simv* DVE* nova* *fsdb verdiLog
+	rm -rf *.vpd csrc *.log *.key *.vdb simv* DVE* nova* *fsdb verdiLog test.fsdb*
 
 mv:
 	-mkdir rtl

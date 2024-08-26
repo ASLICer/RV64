@@ -1,5 +1,5 @@
 module issue#(
-    parameter INSTR_NUM = 4,
+    parameter DECODE_NUM = 4,
     parameter ISSUE_NUM = 4,
     parameter CIQ_DEPTH = 16,
     parameter OPCODE = 7,
@@ -32,24 +32,24 @@ module issue#(
 )(
     input clk,
     //from rename   
-    input [OPCODE-1:0] instr_op[INSTR_NUM-1:0],//指令的opcode
-    input instr_prs1_v[INSTR_NUM-1:0],//指令是否有来自源寄存器1操作数
-    input instr_prs2_v[INSTR_NUM-1:0],//指令是否有来自源寄存器2操作数  
-    input instr_prd_v[INSTR_NUM-1:0],//指令是否有目的寄存器     
-    input [PRF_WIDTH-1:0] instr_prs1[INSTR_NUM-1:0],//源寄存器1对应的物理寄存器编号
-    input [PRF_WIDTH-1:0] instr_prs2[INSTR_NUM-1:0],//源寄存器2对应的物理寄存器编号  
-    input [PRF_WIDTH-1:0] instr_prd[INSTR_NUM-1:0],//目的寄存器对应的物理寄存器编号
-    input [AGE-1:0] age [INSTR_NUM-1:0];//指令的年龄
+    input [OPCODE-1:0] instr_op [DECODE_NUM-1:0],//指令的opcode
+    input instr_prs1_v [DECODE_NUM-1:0],//指令是否有来自源寄存器1操作数
+    input instr_prs2_v [DECODE_NUM-1:0],//指令是否有来自源寄存器2操作数  
+    input instr_prd_v [DECODE_NUM-1:0],//指令是否有目的寄存器     
+    input [PRF_WIDTH-1:0] instr_prs1 [DECODE_NUM-1:0],//源寄存器1对应的物理寄存器编号
+    input [PRF_WIDTH-1:0] instr_prs2 [DECODE_NUM-1:0],//源寄存器2对应的物理寄存器编号  
+    input [PRF_WIDTH-1:0] instr_prd [DECODE_NUM-1:0],//目的寄存器对应的物理寄存器编号
+    input [AGE-1:0] age [DECODE_NUM-1:0];//指令的年龄
     //to FU
-    output [DATA_WIDTH-1:0] src0 [INSTR_NUM-1:0],//第一个操作数   
-    output [DATA_WIDTH-1:0] src1 [INSTR_NUM-1:0]//第二个操作数   
+    output [DATA_WIDTH-1:0] src0 [DECODE_NUM-1:0],//第一个操作数   
+    output [DATA_WIDTH-1:0] src1 [DECODE_NUM-1:0]//第二个操作数   
 );
 reg [IQ_WIDTH-1:0] ciq [CIQ_DEPTH-1:0];//16个表项的集中式发射队列
 
 //////////////////////分配电路(寻找发射队列空闲表项)//////////////////////////
 reg [CIQ_DEPTH-1:0] ciq_free;//16个空闲标志位
-wire [3:0] free_addr [INSTR_NUM-1:0];//发射队列空闲表项的地址
-wire [INSTR_NUM-1:0] free_valid;//所在地址确实是空闲的 
+wire [3:0] free_addr [DECODE_NUM-1:0];//发射队列空闲表项的地址
+wire [DECODE_NUM-1:0] free_valid;//所在地址确实是空闲的 
 
 integer i,j;
 always@(*)begin
@@ -57,8 +57,8 @@ always@(*)begin
         ciq_free[i] = ciq[i][0];
 end
 allocation allocation_u0#(
-    INSTR_NUM,
-    INSTR_NUM
+    DECODE_NUM,
+    DECODE_NUM
 )(
     ciq_free,
     free_addr,
@@ -67,7 +67,7 @@ allocation allocation_u0#(
 ////////////////////////////////////////////////
 ////////////////////发射队列////////////////////////
 issue_queue issue_queue_u0#(
-    INSTR_NUM，
+    DECODE_NUM,
     ISSUE_NUM,
     CIQ_DEPTH,
     OPCODE,

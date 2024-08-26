@@ -1,5 +1,5 @@
 module issue_queue#(
-    parameter INSTR_NUM = 4,
+    parameter DECODE_NUM = 4,
     parameter ISSUE_NUM = 4,
     parameter CIQ_DEPTH = 16,
     parameter OPCODE = 7,
@@ -18,17 +18,17 @@ module issue_queue#(
 )(
     input clk,
     //from rename   
-    input [OPCODE-1:0] instr_op[INSTR_NUM-1:0],//指令的opcode
-    input instr_prs1_v[INSTR_NUM-1:0],//指令是否有来自源寄存器1操作数
-    input instr_prs2_v[INSTR_NUM-1:0],//指令是否有来自源寄存器2操作数  
-    input instr_prd_v[INSTR_NUM-1:0],//指令是否有目的寄存器     
-    input [PRF_WIDTH-1:0] instr_prs1[INSTR_NUM-1:0],//源寄存器1对应的物理寄存器编号
-    input [PRF_WIDTH-1:0] instr_prs2[INSTR_NUM-1:0],//源寄存器2对应的物理寄存器编号  
-    input [PRF_WIDTH-1:0] instr_prd[INSTR_NUM-1:0],//目的寄存器对应的物理寄存器编号
-    input [AGE-1:0] age [INSTR_NUM-1:0],//指令的年龄
+    input [OPCODE-1:0] instr_op[DECODE_NUM-1:0],//指令的opcode
+    input instr_prs1_v[DECODE_NUM-1:0],//指令是否有来自源寄存器1操作数
+    input instr_prs2_v[DECODE_NUM-1:0],//指令是否有来自源寄存器2操作数  
+    input instr_prd_v[DECODE_NUM-1:0],//指令是否有目的寄存器     
+    input [PRF_WIDTH-1:0] instr_prs1[DECODE_NUM-1:0],//源寄存器1对应的物理寄存器编号
+    input [PRF_WIDTH-1:0] instr_prs2[DECODE_NUM-1:0],//源寄存器2对应的物理寄存器编号  
+    input [PRF_WIDTH-1:0] instr_prd[DECODE_NUM-1:0],//目的寄存器对应的物理寄存器编号
+    input [AGE-1:0] age [DECODE_NUM-1:0],//指令的年龄
     //from allocation  
-    input [3:0] free_addr [INSTR_NUM-1:0],//发射队列空闲表项的地址  
-    input [INSTR_NUM-1:0] free_valid,//所在地址确实是空闲的
+    input [3:0] free_addr [DECODE_NUM-1:0],//发射队列空闲表项的地址  
+    input [DECODE_NUM-1:0] free_valid,//所在地址确实是空闲的
     //from aribiter
     input [3:0] arbit_addr [ISSUE_NUM-1:0],//仲裁出的指令所在发射队列地址
     input [ISSUE_NUM-1:0] arbit_grant,//仲裁出的结果是有效的
@@ -41,7 +41,7 @@ module issue_queue#(
 
 //每个cycle找到空闲表项将重命名后的指令写入发射队列
 always@(posedge clk)begin
-    for(i=0;i<INSTR_NUM;i=i+1)
+    for(i=0;i<DECODE_NUM;i=i+1)
         if(free_valid[i])
             ciq[free_addr[i]] <= {instr_op[i],instr_prs1[i],instr_prs1_v[i],instr_prs1_rdy[i],instr_prs2[i],instr_prs2_v[i],instr_prs2_rdy[i],instr_prd[i],instr_prd_v[i],instr_age[i],2'b00};  
 end

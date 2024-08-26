@@ -7,8 +7,8 @@ reg	[DATA_WIDTH-1:0]registers [31:0];
 
 
 initial begin
-	$readmemh("./test/registers/RV32/reg_u_type.c", registers);
-	$readmemb("./test/instructions/RV32/u_type.c", riscv_top_u1.instr_memory_inst.rom);
+	$readmemh("./test/registers/RV32/reg_arithmetic.c", registers);
+	$readmemb("./test/instructions/RV32/arithmetic.c", riscv_top_u1.instr_memory_inst.rom);
 end
 
 riscv_top #(.DATA_WIDTH(DATA_WIDTH))riscv_top_u1(
@@ -44,7 +44,7 @@ initial begin
 		$display("~~~~~~~~How many regs are correct?   %2d ~~~~~~~~", j);
         $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	if(j==32)begin
-            $display("~~~~~~~~u_type  INSTRUCTIONS TEST PASS ~~~~~~~~~~~");
+            $display("~~~~~~~~arithmetic  INSTRUCTIONS TEST PASS ~~~~~~~~~~~");
             $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             $display("~~~~~~~~~ #####     ##     ####    #### ~~~~~~~~~");
             $display("~~~~~~~~~ #    #   #  #   #       #     ~~~~~~~~~");
@@ -55,7 +55,7 @@ initial begin
             $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     end 
 	else begin
-            $display("~~~~~~~~u_type  INSTRUCTIONS TEST FAIL ~~~~~~~~~~~");
+            $display("~~~~~~~~arithmetic  INSTRUCTIONS TEST FAIL ~~~~~~~~~~~");
             $display("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             $display("~~~~~~~~~~######    ##       #    #     ~~~~~~~~~~");
             $display("~~~~~~~~~~#        #  #      #    #     ~~~~~~~~~~");
