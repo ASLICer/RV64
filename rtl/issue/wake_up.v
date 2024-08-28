@@ -9,10 +9,12 @@ module wake_up#(
     input [PRF_WIDTH-1:0] ciq_prs1[CIQ_DEPTH-1:0],//发射队列中所有指令的源寄存器1对应的物理寄存器编号
     input [PRF_WIDTH-1:0] ciq_prs2[CIQ_DEPTH-1:0],//发射队列中所有指令的源寄存器2对应的物理寄存器编号
     //from arbiter
-    input [ISSUE_NUM-1:0] arbit_grant,
+    input [ISSUE_NUM-1:0] arbit_grant,//被仲裁出的指令是否有效
     //to issue_queue
-    output reg prs1_rdy [CIQ_DEPTH-1:0],
-    output reg prs2_rdy [CIQ_DEPTH-1:0]    
+    output reg prs1_rdy [CIQ_DEPTH-1:0],//更新发射队列指令源寄存器1的ready信号
+    output reg prs2_rdy [CIQ_DEPTH-1:0],//更新发射队列指令源寄存器2的ready信号
+    //to arbiter
+    output muti_finish//多周期指令是否执行完毕   
 );
 wire [PRF_WIDTH-1:0] tag_bus [ISSUE_NUM-1:0];
 integer i,j;
@@ -27,18 +29,37 @@ end
 //多周期指令专门用一条bus，bus在多周期指令倒数第三个执行周期更新，这时才可以用于唤醒其他指令
 reg [4:0] cnt;//计数器，用于计数多周期指令已经执行的周期，假定mul/div需要32个周期
 always@(posedge clk or posedge rst)begin
-    if(rst)
+    if(rst)begin
         cnt <= 0;
-    else if(cnt == 0)
+    end
+    else if(cnt == 0)begin
         cnt <= arbit_grant[2] ? 1 : 0;//需要有效的仲裁来启动计数
-    else
+    end
+    else begin
         cnt <= (cnt == 31) ? 0 : cnt + 1; //启动计数后，不再需要有效的仲裁来维持计数
-    if(cnt == 31)
-        tag_bus[2] <= arbit_prd[2];
-    else
-        tag_bus[2] <= 1'b0;
+    end
 end 
 
+always@(posedge clk or posedge rst)begin
+    if(rst)
+        tag_bus[2] <= 0;
+    else 
+        tag_bus[2] <= (cnt == 31) ? arbit_prd[2] : 1'b0;
+end
+always@(posedge clk or posedge rst)begin
+    if(rst)begin
+        muti_finish <= 1'b0;
+    end
+    else if(cnt == 0)begin
+        muti_finish <= arbit_grant[2] ? 1'b0 : 1'b1;//如果仲裁出新的指令，则置零，接下来其他的请求都无效，直到muti_finish=1
+    end
+    else if(cnt == 31)begin
+        muti_finish <= 1'b1;//本条多周期指令执行完毕
+    end
+    else begin
+        muti_finish <= 1'b0;
+    end
+end 
 //比较bus上的寄存器编号和发射队列的源寄存器编号，相等则唤醒，ready置1
 always@(*)begin
     for(i=0;i<CIQ_DEPTH;i=i+1)begin
