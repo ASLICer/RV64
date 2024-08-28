@@ -9,7 +9,8 @@ module arbiter#(
     input [AGE-1:0] age [15:0],
 
     output grant,//请求发射成功
-    output [3:0] addr
+    output [3:0] addr,
+    input muti_finish
 );//最小的年龄值对应最旧的指令
 //各级的有效请求
 reg req16 [15:0];
@@ -27,7 +28,7 @@ reg [3:0] addr4 [3:0];
 reg [3:0] addr2 [1:0];
 reg [3:0] addr1;
 assign addr = addr1;
-assign grant = | req16;//16个请求中至少有一个有效
+assign grant = (| req16) && ((OP != MUL) | muti_finish);//16个请求中至少有一个有效,如果是多周期指令arbiter，需要等上一条指令多周期指令执行完毕
 integer i;
 always@(*)begin
     for(i=0;i<15;i=i+1)
