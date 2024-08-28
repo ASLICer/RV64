@@ -43,6 +43,7 @@ module issue#(
 
 )(
     input clk,
+    input rst,
     //////////指令进入发射队列//////////
     //from instr_decode  
     input [OPCODE-1:0] instr_op [DECODE_NUM-1:0],//指令的opcode
