@@ -58,9 +58,9 @@ generate
 					 	 J_type[i] ? J_imme[i]:
 				 	 	 B_type[i] ? B_imme[i]:
 					 	 S_type[i] ? S_imme[i]:{(DATA_WIDTH){1'b0}};
-		assign instr_prs1_v[i] = R_type | I_type | S_type | B_type;
-		assign instr_prs2_v[i] = R_type | S_type | B_type;
-		assign instr_prd_v [i] = R_type | I_type | U_type | J_type;
+		assign instr_prs1_v[i] = R_type[i] | I_type[i] | S_type[i] | B_type[i];
+		assign instr_prs2_v[i] = R_type[i] | S_type[i] | B_type[i];
+		assign instr_prd_v [i] = R_type[i] | I_type[i] | U_type[i] | J_type[i];
 	end
 endgenerate
 
