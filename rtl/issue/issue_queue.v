@@ -25,9 +25,9 @@ module issue_queue#(
     input clk,
     //from instr_decode 
     input [OPCODE-1:0] instr_op[DECODE_NUM-1:0],//指令的opcode
-    input [FUN3-1:0] func3 [DECODE_NUM-1:0],//指令的func3
-	input [DECODE_NUM-1:0] func7,//指令的func7
-    input [IMME-1:0] imme [DECODE_NUM-1:0],//指令的立即数
+    input [FUN3-1:0] instr_func3 [DECODE_NUM-1:0],//指令的func3
+	input [DECODE_NUM-1:0] instr_func7,//指令的func7
+    input [IMME-1:0] instr_imme [DECODE_NUM-1:0],//指令的立即数
 
     //from rename
     input instr_prs1_v[DECODE_NUM-1:0],//指令是否有来自源寄存器1操作数
@@ -55,7 +55,7 @@ module issue_queue#(
 always@(posedge clk)begin
     for(i=0;i<DECODE_NUM;i=i+1)
         if(free_valid[i])
-            ciq[free_addr[i]] <= {instr_op[i],instr_prs1[i],instr_prs1_v[i],instr_prs1_rdy[i],instr_prs2[i],instr_prs2_v[i],instr_prs2_rdy[i],instr_prd[i],instr_prd_v[i],instr_age[i],2'b00};  
+            ciq[free_addr[i]] <= {instr_op[i],instr_func3[i],instr_func7[i],instr_imme[i],instr_prs1[i],instr_prs1_v[i],instr_prs1_rdy[i],instr_prs2[i],instr_prs2_v[i],instr_prs2_rdy[i],instr_prd[i],instr_prd_v[i],instr_age[i],2'b00};  
 end
 
 integer i,j;
