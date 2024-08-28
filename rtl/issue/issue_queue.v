@@ -59,9 +59,9 @@ end
 //根据唤醒电路结果在下个cycle更新ready信号，下个cycle就有机会被arbiter选中
 always@(posedge clk)begin
     for(i=0;i<CIQ_DEPTH;i=i+1)
-        if(ciq[i][0] = 1'b0)begin//该表项不是空闲的
-            ciq[i][PRS1_RDY] = instr_prs1_rdy[i];
-            ciq[i][PRS2_RDY] = instr_prs2_rdy[i];
+        if(ciq[i][0] = 1'b0)begin//该表项不是空闲的,空闲的表项不用写入ready
+            ciq[i][PRS1_RDY] = (instr_prs1_rdy[i] == 1'b1) ? instr_prs1_rdy[i] : ciq[i][PRS1_RDY];//新的ready信号为1才需要写入
+            ciq[i][PRS2_RDY] = (instr_prs2_rdy[i] == 1'b1) ? instr_prs2_rdy[i] : ciq[i][PRS2_RDY];//否则原本ready已经为1，被误写为0
         end
 end
 endmoudle
