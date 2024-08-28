@@ -2,7 +2,13 @@ module issue_queue#(
     parameter DECODE_NUM = 4,
     parameter ISSUE_NUM = 4,
     parameter CIQ_DEPTH = 16,
+    parameter DATA_WIDTH = 64,
+
     parameter OPCODE = 7,
+    parameter FUN3 = 3,
+    parameter FUN7 =1,
+    parameter IMME = DATA_WIDTH,
+
     parameter PRF_WIDTH = 6,
     parameter VALID = 1,
     parameter READY = 1,
@@ -17,8 +23,13 @@ module issue_queue#(
     parameter PRS2_RDY
 )(
     input clk,
-    //from rename   
+    //from instr_decode 
     input [OPCODE-1:0] instr_op[DECODE_NUM-1:0],//指令的opcode
+    input [FUN3-1:0] func3 [DECODE_NUM-1:0],//指令的func3
+	input [DECODE_NUM-1:0] func7,//指令的func7
+    input [IMME-1:0] imme [DECODE_NUM-1:0],//指令的立即数
+
+    //from rename
     input instr_prs1_v[DECODE_NUM-1:0],//指令是否有来自源寄存器1操作数
     input instr_prs2_v[DECODE_NUM-1:0],//指令是否有来自源寄存器2操作数  
     input instr_prd_v[DECODE_NUM-1:0],//指令是否有目的寄存器     
@@ -35,6 +46,7 @@ module issue_queue#(
     //from wake up
     input prs1_rdy [CIQ_DEPTH-1:0],//唤醒电路得到的源寄存器1的ready信号
     input prs2_rdy [CIQ_DEPTH-1:0],//唤醒电路得到的源寄存器2的ready信号
+    
     output reg [IQ_WIDTH-1:0] ciq [CIQ_DEPTH-1:0]//16个表项的集中式发射队列
 );
 
