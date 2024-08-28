@@ -1,0 +1,125 @@
+Command Line: /home/synopsys/verdi/Verdi_O-2018.09-SP2/platform/LINUXAMD64/bin/Novas -sv ./rtl/multiplier.v ./test/tb_mul.v -ssf test.fsdb
+uname(Linux IC_EDA 3.10.0-1160.53.1.el7.x86_64 #1 SMP Fri Jan 14 13:59:45 UTC 2022 x86_64)
+type= DS_SIGNAL element= 24 field= 2
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG clk
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG rst
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG mult_ready
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG inst_op_f3[9:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG mult_op1[63:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG mult_op2[63:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG product_val[63:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG mult_finish
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG busy_o
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG INST_MUL
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG INST_MULH
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG INST_MULHSU
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG INST_MULHU
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG INST_MULW
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG mult_valid
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG multiplier[63:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG op1_signbit
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG op2_signbit
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG op1_absolute[63:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG op2_absolute[63:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG multiplicand[127:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG product_lins[127:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG product_temp[127:0]
+-----
+second field= signal
+VERILOG tb_mul
+VERILOG multiplier_u0
+VERILOG product_signbit
+-----
+second field= signal
+type= DS_STRING
+clk rst mult_ready inst_op_f3[9:0] mult_op1[63:0] mult_op2[63:0] product_val[63:0] mult_finish busy_o INST_MUL INST_MULH INST_MULHSU INST_MULHU INST_MULW mult_valid multiplier[63:0] op1_signbit op2_signbit op1_absolute[63:0] op2_absolute[63:0] multiplicand[127:0] product_lins[127:0] product_temp[127:0] product_signbit

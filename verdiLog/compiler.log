@@ -1,0 +1,11 @@
+*design* DebussyLib (btIdent Verdi_O-2018.09-SP2)
+Command arguments:
+    +define+verilog
+    -sv
+    ./rtl/multiplier.v
+    ./test/tb_mul.v
+
+Highest level modules:
+tb_mul
+
+Total	0 error(s),   0 warning(s)

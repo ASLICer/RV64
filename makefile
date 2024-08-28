@@ -48,6 +48,14 @@ rename:
 	 ./rtl/rename.v ./test/tb_rename.v \
 	-l com.log
 	make sim
+vmul: mul
+	verdi -sv  ./rtl/multiplier.v ./test/tb_mul.v  \
+	-ssf test.fsdb &
+mul:
+	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns \
+	 ./rtl/multiplier.v ./test/tb_mul.v \
+	-l com.log
+	make sim
 
 
 
