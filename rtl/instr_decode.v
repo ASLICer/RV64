@@ -7,7 +7,7 @@ module instr_decode#(
 	input  [31:0]instr [DECODE_NUM-1:0],
 	output [6:0] opcode [DECODE_NUM-1:0],
 	output [2:0] func3 [DECODE_NUM-1:0],
-	output func7 [DECODE_NUM-1:0],
+	output [DECODE_NUM-1:0] func7 ,
 	output [4:0] Rs1 [DECODE_NUM-1:0],
 	output [4:0] Rs2 [DECODE_NUM-1:0],
 	output [4:0] Rd [DECODE_NUM-1:0],
