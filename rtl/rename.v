@@ -188,15 +188,15 @@ always@(negedge clk or posedge rst)begin//上升沿读，下降沿写，保证�
 	end
 	else begin
 		if(instr_prd_v[0])begin//指令1/指令2/指令3的目的寄存器和指令0的目的寄存器相同，则指令0不写RAT
-			if(~(((instr0_rd == instr1_rd) && instr_prs1_v[1]) | ((instr0_rd == instr2_rd) && instr_prs1_v[2]) | ((instr0_rd == instr3_rd) && instr_prs1_v[3])))
+			if(~(((instr0_rd == instr1_rd) && instr_prd_v[1]) | ((instr0_rd == instr2_rd) && instr_prd_v[2]) | ((instr0_rd == instr3_rd) && instr_prd_v[3])))
     	    	rat[instr0_rd] <= instr0_prd ;
 		end
 		if(instr_prd_v[1])begin//指令2/指令3的目的寄存器和指令1的目的寄存器相同，则指令1不写RAT
-			if(~(((instr1_rd == instr2_rd) && instr_prs1_v[2]) | ((instr1_rd == instr3_rd) && instr_prs1_v[3])))
+			if(~(((instr1_rd == instr2_rd) && instr_prd_v[2]) | ((instr1_rd == instr3_rd) && instr_prd_v[3])))
     	    	rat[instr1_rd] <= instr1_prd ;
 		end
 		if(instr_prd_v[2])begin//指令3的目的寄存器和指令2的目的寄存器相同，则指令2不写RAT
-			if(~((instr2_rd == instr3_rd) && instr_prs1_v[3]))
+			if(~((instr2_rd == instr3_rd) && instr_prd_v[3]))
     	    	rat[instr2_rd] <= instr2_prd ;
 		end
     	if(instr_prd_v[3])//指令3只要存在目的寄存器，指令3的新映射关系一定会被写入
