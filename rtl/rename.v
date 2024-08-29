@@ -1,10 +1,12 @@
 module rename#(
 	parameter ARF_WIDTH = 5,
     parameter PRF_WIDTH = 6,
-	parameter DECODE_NUM = 4
+	parameter DECODE_NUM = 4,
+    parameter RETIRE_NUM = 4
 )(  
     input clk,
 	input rst,
+    ///////////////////from instr_decode////////////////////
     //源寄存器的逻辑寄存器编号
     input [ARF_WIDTH-1:0] instr0_rs1,
     input [ARF_WIDTH-1:0] instr0_rs2,
@@ -23,6 +25,14 @@ module rename#(
 	input  [DECODE_NUM-1:0]instr_prs1_v,//指令是否有来自源寄存器1操作数
     input  [DECODE_NUM-1:0]instr_prs2_v,//指令是否有来自源寄存器2操作数  
     input  [3:0]instr_prd_v,//指令是否有目的寄存器
+        
+    //from rob,指令退休 && 退休的指令存在目的寄存器>>释放指令的旧目的寄存器
+    input [RETIRE_NUM-1:0] retire; //四条最旧指令是否可以退休
+    input [2:0] retire_num,//本周期退休指令数量，退休几条则free list写地址加几
+    input [RETIRE_NUM-1:0] rob_areg_v,//最旧四条指令是否存在目的寄存器
+    input [PRF_WIDTH-1:0] rob_opreg [RETIRE_NUM-1:0],//最旧四条指令的opreg
+
+    //////////////////to issue ///////////////////////////////
     //源寄存器的物理寄存器编号
     output [PRF_WIDTH-1:0] instr0_prs1,
     output [PRF_WIDTH-1:0] instr0_prs2,
@@ -32,6 +42,7 @@ module rename#(
     output [PRF_WIDTH-1:0] instr2_prs2,
     output [PRF_WIDTH-1:0] instr3_prs1,
     output [PRF_WIDTH-1:0] instr3_prs2,
+    //////////////////to issue and rob///////////////////////////////
     //目的寄存器的物理寄存器编号
     output [PRF_WIDTH-1:0] instr0_prd,
     output [PRF_WIDTH-1:0] instr1_prd,
@@ -46,8 +57,10 @@ module rename#(
 reg [PRF_WIDTH-1:0] rat [31:0];//重命名映射表
 reg [PRF_WIDTH-1:0] freelist [31:0];//空闲列表,FIFO实现(64个物理寄存器最多有32空闲，32个在RAT存在映射关系)
 reg [2:0] free_num;//需要的空闲寄存器个数
+reg [2:0] free_wnum;//写入的空闲寄存器个数
 reg [4:0] fl_addr_before;//freelist未加上free_num的读地址（上周期freelist分配后的读地址）
 wire [4:0] fl_addr_after;//freelist加上free_num的读地址（本周期freelist分配后的读地址）
+reg [4:0] fl_waddr;//freelist的写地址
 //从RAT中读取的源寄存器的物理寄存器编号(由于相关性，不一定是正确的)
 reg [PRF_WIDTH-1:0] instr0_rat_prs1;
 reg [PRF_WIDTH-1:0] instr0_rat_prs2;
@@ -61,7 +74,7 @@ reg [PRF_WIDTH-1:0] instr3_rat_prs2;
 
 assign fl_addr_after = fl_addr_before + free_num;
 integer i;
-
+//计算需要的空闲寄存器个数
 always@(instr_prd_v or rst) begin
 	if(rst)
 		free_num = 1'b0;
@@ -72,21 +85,76 @@ always@(instr_prd_v or rst) begin
 	end
 end
 
+wire [RETIRE_NUM-1:0] retire_rdv;//指令退休且存在目的寄存器
+always@(*) begin
+    for(i=0;i<RETIRE_NUM;i=i+1)
+		retire_rdv[i] = rob_areg_v[i] & retire[i];
+	end
+end
+//计算写入的空闲寄存器个数
+always@(instr_prd_v or rst) begin
+	if(rst)
+		free_wnum = 1'b0;
+    else begin 
+		free_wnum = 1'b0;
+    	for(i=0;i<RETIRE_NUM;i=i+1)
+			free_wnum = free_wnum + retire_rdv[i];
+	end
+end
+//更新freelist读地址
 always@(posedge clk or posedge rst)begin
 	if(rst)
 		fl_addr_before = 0;
 	else
-		fl_addr_before = fl_addr_after;
-		
+		fl_addr_before = fl_addr_after;	
 end
-//assign fl_addr_before = rst ? 1'b0 : (fl_addr_before+free_num);
+//更新freelist写地址
+
+always@(posedge clk or posedge rst)begin
+	if(rst)
+		fl_waddr = 0;
+	else
+		fl_waddr = fl_waddr + free_wnum;	
+end
+
+//根据退休指令数目以及需要写入free list的物理寄存器数目，向free list 写入释放的物理寄存器号
 always@(posedge clk or posedge rst)begin
     if(rst)
         for(i=0;i<32;i=i+1)//复位后0-31已经在RAT中有映射关系，32-63物理寄存器都是空闲的
 			freelist[i] <= i+32;
-
+    else begin
+    	case(free_wnum)
+        	1:	begin//0,1,2,3
+                    freelist[fl_waddr] <= (retire_rdv == 4'b0001) ? rob_opreg[0] ://向free list写入最旧退休指令的物理寄存器
+                                          (retire_rdv == 4'b0010) ? rob_opreg[1] ://向free list写入第二旧退休指令的物理寄存器
+                                          (retire_rdv == 4'b0100) ? rob_opreg[2] ://向free list写入第三旧退休指令的物理寄存器
+                                          (retire_rdv == 4'b1000) ? rob_opreg[3] ://向free list写入第四旧退休指令的物理寄存器
+                                          freelist[fl_waddr];
+                end
+        	2:	begin//01,02,03,12,13,23
+    				freelist[fl_waddr-1] <= (retire_rdv == 4'b0011) ? rob_opreg[1] :
+                                            ((retire_rdv == 4'b0101) | (retire_rdv == 4'b0011)) ? rob_opreg[2] :
+                                            ((retire_rdv == 4'b1001) | (retire_rdv == 4'b1010) | (retire_rdv == 4'b1100)) ? rob_opreg[3] :
+                                            freelist[fl_waddr-1];
+    				freelist[fl_waddr] <= ((retire_rdv == 4'b0011) | (retire_rdv == 4'b0101) | (retire_rdv == 4'b1001)) ? rob_opreg[0] :
+                                          ((retire_rdv == 4'b0110) | (retire_rdv == 4'b1010)) ? rob_opreg[1] :
+                                          ((retire_rdv == 4'b1100)) ? rob_opreg[2] :
+                                          freelist[fl_waddr];
+    			end
+        	3:	begin//012,013,123,123
+    				freelist[fl_waddr-2] <= (retire_rdv == 4'b0111) ? rob_opreg[2] : rob_opreg[3];
+    				freelist[fl_waddr-1] <= ((retire_rdv == 4'b0111) | (retire_rdv == 4'b1011)) ? rob_opreg[1] : rob_opreg[2]];
+                    freelist[fl_waddr]   <= ((retire_rdv == 4'b0111) | (retire_rdv == 4'b1011)) ? rob_opreg[0] : rob_opreg[1]];
+    			end
+        	4:	begin//0123
+    				freelist[fl_waddr-3] <= rob_opreg[0];
+    				freelist[fl_waddr-2] <= rob_opreg[1];
+                    freelist[fl_waddr-1] <= rob_opreg[2];
+                    freelist[fl_waddr]   <= rob_opreg[3];
+    			end	
+    	endcase
+    end
 end
-
 //从空闲列表中找到空闲的物理寄存器，作为指令的目的寄存器对应的物理寄存器(由于WAW相关性，不一定是正确的)
 //组合逻辑读freelist,因为读完后还要写新的映射关系进RAT(上升沿写入)
 //整个过程在一个周期内完成
