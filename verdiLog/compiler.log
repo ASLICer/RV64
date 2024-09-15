@@ -2,10 +2,12 @@
 Command arguments:
     +define+verilog
     -sv
-    ./rtl/multiplier.v
-    ./test/tb_mul.v
+    ./rtl/rename.v
+    ./rtl/instr_decode.v
+    ./test/instr_buffer.v
+    ./test/tb_decode_rename.v
 
 Highest level modules:
-tb_mul
+tb_decode_rename
 
 Total	0 error(s),   0 warning(s)

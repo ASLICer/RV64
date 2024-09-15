@@ -12,6 +12,8 @@
 `define		R_type			7'b0110011
 `define		Iw_type			7'b0011011
 `define		Rw_type			7'b0111011
+`define     MD_type         7'b0110011
+`define     MDW_type        7'b0111011
 
 //alu_control:self define,can change 
 `define 	ADD  			5'b0_0001
@@ -31,3 +33,20 @@
 `define 	SRLW  			5'b1_1101
 `define 	SRAW  			5'b1_1110
 
+`define 	LUI  			5'b1_1111
+
+//mul div instructions
+`define     MUL             4'b0000
+`define     MULH            4'b0001
+`define     MULHSU          4'b0010
+`define     MULHU           4'b0011
+`define     DIV             4'b0100
+`define     DIVU            4'b0101
+`define     REM             4'b0110
+`define     REMU            4'b0111
+
+`define     MULW            4'b1000
+`define     DIVW            4'b1100
+`define     DIVUW           4'b1101
+`define     REMW            4'b1110
+`define     REMUW           4'b1111

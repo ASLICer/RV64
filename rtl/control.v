@@ -1,42 +1,42 @@
-module control(
+module control#(
+    parameter ISSUE_NUM = 4
+)(
 	input 	wire 			clk,
 	input 	wire 			rst_n,
 
-	//decode stage
+	//decode stage(rf read stage)
 		//from datapath
-	input 	wire	[6:0] 	opcodeD,
-	input 	wire	[2:0] 	func3D,
-	input 	wire			func7D,
-		//to datapath
-	output	wire			jalD,
-	output	wire			jalrD,
-	output	wire			luiD,
-	output	wire			auipcD,
-	output	wire			beqD,
-	output	wire			bneD,
-	output	wire			bltD,
-	output	wire			bgeD,
-	output	wire			bltuD,
-	output	wire			bgeuD,
-	output	wire			memwriteD,
+	input 	wire	[6:0] 	opcodeD [ISSUE_NUM-1:0],
+	input 	wire	[2:0] 	func3D  [ISSUE_NUM-1:0],
+	input 	wire			func7D  [ISSUE_NUM-1:0],
 
-	//execute stage
+    //execute stage
 		//from datapath
 	input 	wire 			flushE,
-		//to datapath
-	output 	wire 			memtoregE,
-	output	wire 			regwriteE,
-	output 	wire 			alusrcE,
-	output 	wire 	[4:0]	aluctlE,
+	    //to datapath
+        //to  alu
+    output  wire 			alusrcE     [1:0];
+    output  wire 			alusrc_pcE  [1:0];
+    output  wire 	[2:0]	aluopE      [1:0];
+    output  wire 	[4:0]	aluctlE     [1:0];
+ 
+        //to  mdu
+    output  wire    [3:0]   mductlE,
+		
+        //to  bru
+	output	wire			jalE,
+	output	wire			jalrE,
+	output	wire			beqE,
+	output	wire			bneE,
+	output	wire			bltE,
+	output	wire			bgeE,
+	output	wire			bltuE,
+	output	wire			bgeuE,
 
 	//mem stage 
 		//to datapath
 	output 	wire 			regwriteM,
-	output	wire 			memtoregM,
-	output	wire			luiM,
-	output	wire			auipcM,
-	output	wire			jalM,
-	output	wire			jalrM,
+
 		//to data_memory
 	output 	wire 			memwriteM,
 	output 	wire 			memreadM, 
@@ -44,28 +44,34 @@ module control(
 
 	//write back stage 
 		//to datapath
-	output 	wire 			memtoregW,
-	output 	wire 			regwriteW,
-	output	wire			luiW,
-	output	wire			auipcW,
-	output	wire			jalW,
-	output 	wire			jalrW
+	output 	wire 			regwriteW
 );
 
 //decode stage
-wire	[2:0]	RW_typeD;
-wire 	[2:0]	aluopD;
-wire 	[4:0]	aluctlD;
-wire 			memtoregD;
-wire 			memreadD;
-wire 			alusrcD;
-wire 			regwriteD;
+wire 			alusrcD     [1:0];
+wire 			alusrc_pcD  [1:0];
+wire 	[2:0]	aluopD      [1:0];
+wire 	[4:0]	aluctlD     [1:0];
+wire			memwriteD   [1:0];
+wire 			memreadD    [1:0];
+wire	[2:0]	RW_typeD    [1:0];
+
+//to mdu
+wire 	[3:0]	mductlD ;
+
+//to datapath bru
+wire			jalD    ;
+wire			jalrD   ;
+wire			beqD    ;
+wire			bneD    ;
+wire			bltD    ;
+wire			bgeD    ;
+wire			bltuD   ;
+wire			bgeuD   ;
+
+wire 			regwriteD   [3:0];
 
 //execute stage
-wire			jalE;
-wire			jalrE;
-wire			luiE;
-wire			auipcE;
 wire	[2:0]	RW_typeE;
 wire 			memwriteE;
 wire 			memreadE;
@@ -76,35 +82,37 @@ dff_rc #(18) rE(
 	.clk(clk),
 	.rst_n(rst_n),
 	.clear(flushE),
-	.d({jalD,jalrD,luiD,auipcD,RW_typeD,aluctlD,memtoregD,memreadD,memwriteD,regwriteD,alusrcD,regwriteD}),
-	.q({jalE,jalrE,luiE,auipcE,RW_typeE,aluctlE,memtoregE,memreadE,memwriteE,regwriteE,alusrcE,regwriteE})
+	.d({jalD,jalrD,beqD,bneD,bltD,bgeD,bltuD,bgeuD,mductlD,aluctlD,aluopD,alusrc_pcD,alusrcD,memreadD,memwriteD,RW_typeD,regwriteD}),
+	.q({jalE,jalrE,beqE,bneE,bltE,bgeE,bltuE,bgeuE,mductlE,aluctlE,aluopE,alusrc_pcE,alusrcE,memreadE,memwriteE,RW_typeE,regwriteE})
 );
 
 dff_r #(11) rM(
 	.clk(clk),
 	.rst_n(rst_n),
-	.d({jalE,jalrE,luiE,auipcE,RW_typeE,memtoregE,memreadE,memwriteE,regwriteE}),
-	.q({jalM,jalrM,luiM,auipcM,RW_typeM,memtoregM,memreadM,memwriteM,regwriteM})
+	.d({RW_typeE,memtoregE,memreadE,memwriteE,regwriteE}),
+	.q({RW_typeM,memtoregM,memreadM,memwriteM,regwriteM})
 );
 
 dff_r #(6) rW(
 	.clk(clk),
 	.rst_n(rst_n),
-	.d({jalM,jalrM,luiM,auipcM,memtoregM,regwriteM}),
-	.q({jalW,jalrW,luiW,auipcW,memtoregW,regwriteW})
+	.d({regwriteM}),
+	.q({regwriteW})
 );
 
 
 main_control main_control_u0(
 	.opcode(opcodeD),
 	.func3(func3D),
+    //to alu
 	.memread(memreadD),
 	.memwrite(memwriteD),
-	.memtoreg(memtoregD),
-	.alusrc(alusrcD),
-	.regwrite(regwriteD),
-	.lui(luiD),
-	.auipc(auipcD),
+    .RW_type(RW_typeD),
+
+    .aluop(aluopD),
+    .alusrc_pc(alusrc_pcD),
+    .alusrc(alusrcD),
+
 	.jal(jalD),
 	.jalr(jalrD),
 	.beq(beqD),
@@ -113,15 +121,26 @@ main_control main_control_u0(
 	.bge(bgeD),
 	.bltu(bltuD),
 	.bgeu(bgeuD),
-	.RW_type(RW_typeD),
-	.aluop(aluopD)
+	
+	.regwrite(regwriteD)	
 );
 
 alu_control alu_control_u0(
-	.aluop(aluopD),
-	.func3(func3D),
-	.func7(func7D),
-	.aluctl(aluctlD)
+	.aluop(aluopD[0]),
+	.func3(func3D[0]),
+	.func7(func7D[0]),
+	.aluctl(aluctlD[0])
+);
+alu_control alu_control_u1(
+	.aluop(aluopD[1]),
+	.func3(func3D[1]),
+	.func7(func7D[1]),
+	.aluctl(aluctlD[1])
+);
+mdu_control mdu_control_u0(
+	.opcode(opcodeD[3]),
+	.func3(func3D[3]),
+	.mductl(mductlD)
 );
 
 endmodule

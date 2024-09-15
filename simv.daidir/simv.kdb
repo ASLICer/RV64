@@ -7,7 +7,7 @@ UUM=FALSE
 KDB=FALSE
 USE_NOVAS_HOME=FALSE
 COSIM=FALSE
-TOP=tb_mul 
+TOP=tb_decode_rename 
 OPTION=-ssv -ssy 
 ELAB_OPTION=-ssv -ssy 
 

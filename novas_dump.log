@@ -146,11 +146,13 @@ VCS compile option:
  option[33]: -fsdb
  option[34]: -sverilog
  option[35]: -gen_obj
- option[36]: ./rtl/multiplier.v
- option[37]: ./test/tb_mul.v
- option[38]: -load
- option[39]: /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/libnovas.so:FSDBDumpCmd
- option[40]: timescale=1ns/1ns
+ option[36]: ./rtl/rename.v
+ option[37]: ./rtl/instr_decode.v
+ option[38]: ./test/instr_buffer.v
+ option[39]: ./test/tb_decode_rename.v
+ option[40]: -load
+ option[41]: /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/libnovas.so:FSDBDumpCmd
+ option[42]: timescale=1ns/1ns
 Chronologic Simulation VCS Release O-2018.09-1_Full64
 Linux 3.10.0-1160.53.1.el7.x86_64 #1 SMP Fri Jan 14 13:59:45 UTC 2022 x86_64
 CPU cores: 8
@@ -159,7 +161,7 @@ Limit information:
 cputime		unlimited
 filesize		unlimited
 datasize		unlimited
-stacksize		8192 kbytes
+stacksize		unlimited
 coredumpsize		0 kbytes
 memoryuse		unlimited
 vmemoryuse		unlimited
@@ -246,7 +248,7 @@ QTLIB=/usr/lib/qt-3.3/lib
 XDG_CURRENT_DESKTOP=GNOME-Classic:GNOME
 INCISIVE_HOME=/home/cadence/INCISIVE152
 novas_args=-P /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/novas.tab /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/pli.a
-OLDPWD=/home/host/digital_ic/risc_v_5pipeline_64
+OLDPWD=/home/host/digital_ic/RV64/rtl
 IMSETTINGS_MODULE=none
 NOVAS=/home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64
 MAKEFLAGS=w
@@ -293,64 +295,64 @@ argv[0]=./simv
 argv[1]=-l
 argv[2]=sim.log
 argv[3]=+fsdb+functions
-295 profile - 100
-          CPU/Mem usage: 0.010 sys,  0.120 user,  278.97M mem
-296 Thu Aug 29 00:04:32 2024
-297 pliAppInit
-298 FSDB_GATE is set.
-299 FSDB_RTL is set.
-300 Enable Parallel Dumping.
-301 pliAppMiscSet: New Sim Round
-302 pliEntryInit
-303 LIBSSCORE=found /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/lib/LINUXAMD64/libsscore_vcs201809.so through $NOVAS_HOME setting.
-304 FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
-305 (C) 1996 - 2019 by Synopsys, Inc.
-306 sps_call_fsdbDumpfile_main at 0 : ./test/tb_mul.v(105)
-307 argv[0]: (test.fsdb)
-308 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
-309 *Verdi* : Create FSDB file 'test.fsdb'
-310 compile option from '/home/host/digital_ic/RV64/simv.daidir/vcs_rebuild'.
-311   "vcs '-sverilog' '-full64' '-debug_acc+all' '-debug_access+dmptf' '-timescale=1ns/1ns' './rtl/multiplier.v' './test/tb_mul.v' '-l' 'com.log' 2>&1"
-312 FSDB_VCS_ENABLE_FAST_VC is enable
-313 sps_call_fsdbDumpvars_vd_main at 0 : ./test/tb_mul.v(106)
-314 argv[0]: (0)
-315 argv[1]: (handle) tb_mul
-316 argv[2]: (+all)
-317 [spi_vcs_vd_ppi_create_root]: no upf option
-318 FSDB dumper cannot dump UPF related power signal ($power_tree): no ppiPowerNetwork.
-319 *Verdi* : Begin traversing the scope (tb_mul), layer (0).
-320 *Verdi* : Enable +all and +functions dumping.
-321 *Verdi* : End of traversing.
-322 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.030 sys,  0.120 user,  373.52M mem
-                   incr: 0.010 sys,  0.000 user,  6.69M mem
-                   accu: 0.010 sys,  0.000 user,  6.69M mem
-              accu incr: 0.010 sys,  0.000 user,  6.69M mem
+297 profile - 100
+          CPU/Mem usage: 0.010 sys,  0.130 user,  279.20M mem
+298 Thu Sep 12 22:43:42 2024
+299 pliAppInit
+300 FSDB_GATE is set.
+301 FSDB_RTL is set.
+302 Enable Parallel Dumping.
+303 pliAppMiscSet: New Sim Round
+304 pliEntryInit
+305 LIBSSCORE=found /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/lib/LINUXAMD64/libsscore_vcs201809.so through $NOVAS_HOME setting.
+306 FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
+307 (C) 1996 - 2019 by Synopsys, Inc.
+308 sps_call_fsdbDumpfile_main at 0 : ./test/tb_decode_rename.v(247)
+309 argv[0]: (./test/decode_rename.fsdb)
+310 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
+311 *Verdi* : Create FSDB file './test/decode_rename.fsdb'
+312 compile option from '/home/host/digital_ic/RV64/simv.daidir/vcs_rebuild'.
+313   "vcs '-sverilog' '-full64' '-debug_acc+all' '-debug_access+dmptf' '-timescale=1ns/1ns' './rtl/rename.v' './rtl/instr_decode.v' './test/instr_buffer.v' './test/tb_decode_rename.v' '-l' 'com.log' 2>&1"
+314 FSDB_VCS_ENABLE_FAST_VC is enable
+315 sps_call_fsdbDumpvars_vd_main at 0 : ./test/tb_decode_rename.v(248)
+316 argv[0]: (0)
+317 argv[1]: (handle) tb_decode_rename
+318 argv[2]: (+all)
+319 [spi_vcs_vd_ppi_create_root]: no upf option
+320 FSDB dumper cannot dump UPF related power signal ($power_tree): no ppiPowerNetwork.
+321 *Verdi* : Begin traversing the scope (tb_decode_rename), layer (0).
+322 *Verdi* : Enable +all and +functions dumping.
+323 *Verdi* : End of traversing.
+324 pliAppHDL_DumpVarComplete traverse var: profile - 
+          CPU/Mem usage: 0.280 sys,  0.130 user,  373.87M mem
+                   incr: 0.020 sys,  0.000 user,  6.67M mem
+                   accu: 0.020 sys,  0.000 user,  6.67M mem
+              accu incr: 0.020 sys,  0.000 user,  6.67M mem
 
-          Count usage: 30 var,  28 idcode,  14 callback
-                 incr: 30 var,  28 idcode,  14 callback
-                 accu: 30 var,  28 idcode,  14 callback
-            accu incr: 30 var,  28 idcode,  14 callback
-323 Thu Aug 29 00:04:33 2024
-324 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.030 sys,  0.120 user,  374.58M mem
+          Count usage: 409 var,  359 idcode,  69 callback
+                 incr: 409 var,  359 idcode,  69 callback
+                 accu: 409 var,  359 idcode,  69 callback
+            accu incr: 409 var,  359 idcode,  69 callback
+325 Thu Sep 12 22:43:43 2024
+326 pliAppHDL_DumpVarComplete: profile - 
+          CPU/Mem usage: 0.280 sys,  0.130 user,  374.92M mem
                    incr: 0.000 sys,  0.000 user,  1.05M mem
-                   accu: 0.010 sys,  0.000 user,  7.75M mem
+                   accu: 0.020 sys,  0.000 user,  7.72M mem
               accu incr: 0.000 sys,  0.000 user,  1.05M mem
 
-          Count usage: 30 var,  28 idcode,  14 callback
+          Count usage: 409 var,  359 idcode,  69 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 30 var,  28 idcode,  14 callback
+                 accu: 409 var,  359 idcode,  69 callback
             accu incr: 0 var,  0 idcode,  0 callback
-325 Thu Aug 29 00:04:33 2024
-326 End of simulation at 2930
-327 Thu Aug 29 00:04:33 2024
-328 Begin FSDB profile info:
-329 FSDB Writer : bc1(320) bcn(441) mtf/stf(0/0)
-FSDB Writer elapsed time : flush(0.006942) io wait(0.000000) theadpool wait(0.000000) target functin(0.000000)
+327 Thu Sep 12 22:43:43 2024
+328 End of simulation at 505
+329 Thu Sep 12 22:43:43 2024
+330 Begin FSDB profile info:
+331 FSDB Writer : bc1(162) bcn(1688) mtf/stf(0/0)
+FSDB Writer elapsed time : flush(0.006669) io wait(0.000000) theadpool wait(0.000000) target functin(0.000000)
 FSDB Writer cpu time : MT Compression : 0
-330 End FSDB profile info
-331 Parallel profile    -  Flush:3 Expand:0 ProduceWait:0 ConsumerWait:0 BlockUsed:0
-332                        ProduceTime:0.168932352 ConsumerTime:0.000000000 Buffer:64MB
-333 SimExit
-334 Sim process exit
+332 End FSDB profile info
+333 Parallel profile    -  Flush:3 Expand:0 ProduceWait:0 ConsumerWait:0 BlockUsed:0
+334                        ProduceTime:0.421051006 ConsumerTime:0.000000000 Buffer:64MB
+335 SimExit
+336 Sim process exit

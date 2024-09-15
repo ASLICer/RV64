@@ -76,4 +76,4 @@ always@(posedge clk)begin
             ciq[i][PRS2_RDY] = (instr_prs2_rdy[i] == 1'b1) ? instr_prs2_rdy[i] : ciq[i][PRS2_RDY];//否则原本ready已经为1，被误写为0
         end
 end
-endmoudle
+endmodule

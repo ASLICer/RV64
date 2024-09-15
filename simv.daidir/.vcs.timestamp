@@ -1,5 +1,5 @@
 0 
-34
+36
 +itf+/home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/vcsdp_lite.tab
 +vcsd1
 +vpi
@@ -29,8 +29,10 @@
 -picarchive
 -sverilog
 -timescale=1ns/1ns
-./rtl/multiplier.v
-./test/tb_mul.v
+./rtl/instr_decode.v
+./rtl/rename.v
+./test/instr_buffer.v
+./test/tb_decode_rename.v
 /home/synopsys/vcs-mx/O-2018.09-1/linux64/bin/vcs1
 /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
 com.log
@@ -142,9 +144,12 @@ CALIBRE_HOME=/home/mentor//calibre2019/aoj_cal_2019.3_15.11
 CALIBRE_ENABLE_SKILL_PEXBA_MODE=1
 CADHOME=/home/cadence
 0
-4
-1724861067 ./test/tb_mul.v
-1724851805 ./rtl/multiplier.v
+7
+1725372282 ./rtl/define.v
+1726078201 ./test/tb_decode_rename.v
+1725460448 ./test/instr_buffer.v
+1725464352 ./rtl/instr_decode.v
+1725465361 ./rtl/rename.v
 1550753332 /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
 1539400757 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/vcsdp_lite.tab
 4
@@ -152,5 +157,5 @@ CADHOME=/home/cadence
 1539401183 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/liberrorinf.so
 1539401125 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/libsnpsmalloc.so
 1539401175 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/libvfs.so
-1724861072 simv.daidir
+1726152222 simv.daidir
 -1 partitionlib

@@ -5,11 +5,17 @@
         "module",
         1
     ],
-    "tb_mul": [
-        "tb_mul",
-        "xmcas",
+    "instr_buffer_0000": [
+        "instr_buffer_0000",
+        "dMIIq",
         "module",
-        2
+        4
+    ],
+    "tb_decode_rename": [
+        "tb_decode_rename",
+        "ICaZd",
+        "module",
+        5
     ],
     "...MASTER...": [
         "SIM",

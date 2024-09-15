@@ -42,12 +42,23 @@ cache:
 	make sim
 vrename: rename
 	verdi -sv  ./rtl/rename.v ./test/tb_rename.v  \
-	-ssf test.fsdb &
+	-ssf ./test/rename.fsdb &
 rename:
 	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns \
 	 ./rtl/rename.v ./test/tb_rename.v \
 	-l com.log
 	make sim
+
+vdere: dere
+	verdi -sv  ./rtl/rename.v ./rtl/instr_decode.v ./test/instr_buffer.v ./test/tb_decode_rename.v  \
+	-ssf ./test/decode_rename.fsdb &
+dere:
+	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns \
+	 ./rtl/rename.v ./rtl/instr_decode.v ./test/instr_buffer.v ./test/tb_decode_rename.v \
+	-l com.log
+	make sim
+
+
 vmul: mul
 	verdi -sv  ./rtl/multiplier.v ./test/tb_mul.v  \
 	-ssf test.fsdb &
@@ -56,7 +67,14 @@ mul:
 	 ./rtl/multiplier.v ./test/tb_mul.v \
 	-l com.log
 	make sim
-
+vdiv: div
+	verdi -sv  ./rtl/divider.v ./test/tb_div.v  \
+	-ssf test.fsdb &
+div:
+	vcs -sverilog -full64 -debug_acc+all -debug_access+dmptf -timescale=1ns/1ns \
+	 ./rtl/divider.v ./test/tb_div.v \
+	-l com.log
+	make sim
 
 
 com:

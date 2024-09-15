@@ -88,11 +88,18 @@ initial begin
 
 	#1320
 	mult_ready = 1'b1;
-	inst_op_f3 = 10'b0111011000;//mulw
-	mult_op1 = -5;
-	mult_op2 =-5;
+	inst_op_f3 = 10'b0111011000;//mulw,低32位相乘
+	mult_op1 = 64'd5;//5
+	mult_op2 = 64'hffff_0000_ffff_fffb;//-5
 
-	#100 $finish;
+	#100
+	mult_ready = 1'b1;
+	inst_op_f3 = 10'b0111011000;//mulw,低32位相乘
+	mult_op1 = 64'hffff_ffff_ffff_fffb;//-5
+	mult_op2 = 64'h0000_ffff_ffff_fffb;//-5
+
+
+	#200 $finish;
 end
 
 

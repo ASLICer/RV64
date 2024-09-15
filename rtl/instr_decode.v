@@ -5,17 +5,17 @@ module instr_decode#(
 )
 (
 	input  [31:0]instr [DECODE_NUM-1:0],
-	output [6:0] opcode [DECODE_NUM-1:0],
+	output [6:0] opcode[DECODE_NUM-1:0],
 	output [2:0] func3 [DECODE_NUM-1:0],
-	output [DECODE_NUM-1:0] func7 ,
-	output [4:0] Rs1 [DECODE_NUM-1:0],
-	output [4:0] Rs2 [DECODE_NUM-1:0],
-	output [4:0] Rd [DECODE_NUM-1:0],
+	output  	 func7 [DECODE_NUM-1:0] ,
+	output [4:0] Rs1   [DECODE_NUM-1:0],
+	output [4:0] Rs2   [DECODE_NUM-1:0],
+	output [4:0] Rd    [DECODE_NUM-1:0],
 	output [DATA_WIDTH-1:0] imme [DECODE_NUM-1:0],
 
 	output  [DECODE_NUM-1:0]instr_prs1_v,//指令是否有来自源寄存器1操作数(R/I/S/B有，U/J没有)
 	output  [DECODE_NUM-1:0]instr_prs2_v,//指令是否有来自源寄存器2操作数(R/S/B有，I/U/J没有)  
-    output  [DECODE_NUM-1:0]instr_prd_v//指令是否有目的寄存器(R/I/U/J有，S/B_type没有)
+    output  [DECODE_NUM-1:0]instr_prd_v //指令是否有目的寄存器(R/I/U/J有，S/B_type没有)
 );
 wire R_type [DECODE_NUM-1:0];
 wire I_type [DECODE_NUM-1:0];
