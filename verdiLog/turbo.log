@@ -1,0 +1,157 @@
+Command Line: /home/synopsys/verdi/Verdi_O-2018.09-SP2/platform/LINUXAMD64/bin/Novas -sv -f filelist -ssf test.fsdb
+uname(Linux IC_EDA 3.10.0-1160.53.1.el7.x86_64 #1 SMP Fri Jan 14 13:59:45 UTC 2022 x86_64)
+type= DS_SIGNAL element= 19 field= 2
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG instr[31:0]
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG opcode[6:0]
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG func3[2:0]
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG func7
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG Rs1[4:0]
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG Rs2[4:0]
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG Rd[4:0]
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG imme
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG DATA_WIDTH
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG I_type
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG U_type
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG J_type
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG B_type
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG S_type
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG I_imme
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG U_imme
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG J_imme
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG B_imme
+-----
+second field= signal
+VERILOG tb
+VERILOG riscv_top_u1
+VERILOG riscv_inst
+VERILOG datapath_u0
+VERILOG instr_decode_u0
+VERILOG S_imme
+-----
+second field= signal
+type= DS_STRING
+instr[31:0] opcode[6:0] func3[2:0] func7 Rs1[4:0] Rs2[4:0] Rd[4:0] imme DATA_WIDTH I_type U_type J_type B_type S_type I_imme U_imme J_imme B_imme S_imme
