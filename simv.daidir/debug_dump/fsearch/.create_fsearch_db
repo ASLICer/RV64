@@ -5,5 +5,5 @@ PYTHONPATH=/home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/pylib27
 export PYTHONPATH
 LD_LIBRARY_PATH=/home/synopsys/vcs-mx/O-2018.09-1/linux64/lib:/home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/pylib27
 export LD_LIBRARY_PATH
-/home/synopsys/vcs-mx/O-2018.09-1/linux64/bin/vcsfind_create_index.exe  -z  "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/./idents_JkFo1l.xml.gz" "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/./idents_tapi.xml.gz" -o "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/fsearch.db_tmp"
+/home/synopsys/vcs-mx/O-2018.09-1/linux64/bin/vcsfind_create_index.exe  -z  "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/./idents_FNrO3R.xml.gz" "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/./idents_tapi.xml.gz" -o "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/fsearch.db_tmp"
 \mv "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/fsearch.db_tmp" "/home/host/digital_ic/rv64-test/simv.daidir/debug_dump/fsearch/fsearch.db"

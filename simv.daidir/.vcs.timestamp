@@ -1,6 +1,6 @@
 0 
 34
-+define+DATA_WIDTH=64
++define+DATA_WIDTH=32
 +itf+/home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/vcsdp_lite.tab
 +vcsd1
 +vpi
@@ -142,38 +142,30 @@ CALIBRE_HOME=/home/mentor//calibre2019/aoj_cal_2019.3_15.11
 CALIBRE_ENABLE_SKILL_PEXBA_MODE=1
 CADHOME=/home/cadence
 0
-33
-1726388674 ./test/tb.v
-1726388658 ./rtl/branch_judge.v
-1726388658 ./rtl/dff_enrc.v
-1726388658 ./rtl/dff_rc.v
-1726388658 ./rtl/EX_MEM.v
-1726388658 ./rtl/IF_ID.v
-1726388658 ./rtl/instr_decode.v
-1726388658 ./rtl/riscv.v
-1726388658 ./rtl/registers.v
-1726388658 ./rtl/mux_fw_resM.v
-1726388658 ./rtl/mux2.v
-1726388658 ./rtl/mux3.v
-1726388658 ./rtl/Adder.v
-1726388658 ./rtl/alu.v
-1726388658 ./rtl/datapath.v
-1726388658 ./rtl/define.v
-1726388658 ./rtl/data_memory.v
-1726388658 ./rtl/adder.v
-1726388658 ./rtl/ID_EX.v
-1726388658 ./rtl/MEM_WB.v
-1726388658 ./rtl/dff_r.v
-1726388658 ./rtl/riscv_top.v
-1726388658 ./rtl/pc_reg.v
-1726388658 ./rtl/mux_wr_reg.v
-1726388658 ./rtl/mux_pc.v
-1726388658 ./rtl/main_control.v
-1726388658 ./rtl/hazard.v
-1726388658 ./rtl/alu_control.v
-1726388658 ./rtl/control.v
-1726388658 ./rtl/instr_memory.v
-1726388658 filelist
+25
+1726392605 ./test/tb.v
+1726392598 ./rtl/instr_memory.v
+1726392598 ./rtl/registers.v
+1726392598 ./rtl/mux5.v
+1726392598 ./rtl/mux3.v
+1726392598 ./rtl/datapath.v
+1726392598 ./rtl/risc.v
+1726392598 ./rtl/main_control.v
+1726392598 ./rtl/branch_judge.v
+1726392598 ./rtl/control.v
+1726392598 ./rtl/alu_control.v
+1726392598 ./rtl/instr_decode.v
+1726392598 ./rtl/Shifter.v
+1726392598 ./rtl/riscv_top.v
+1726392598 ./rtl/alu.v
+1726392598 ./rtl/cla_adder32.v
+1726392598 ./rtl/Adder.v
+1726392598 ./rtl/define.v
+1726392598 ./rtl/mux.v
+1726392598 ./rtl/data_memory.v
+1726392598 ./rtl/pc_reg.v
+1726392598 ./rtl/timescale.v
+1726392598 filelist
 1550753332 /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
 1539400757 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/vcsdp_lite.tab
 4
@@ -181,5 +173,5 @@ CADHOME=/home/cadence
 1539401183 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/liberrorinf.so
 1539401125 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/libsnpsmalloc.so
 1539401175 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/libvfs.so
-1726388674 simv.daidir
+1726392605 simv.daidir
 -1 partitionlib

@@ -19,7 +19,7 @@ cs_%:
 	make change_tb_$*
 	make cs
 
-DATA_WIDTH=64
+DATA_WIDTH=32
 TB_NAME=tb
 change_tb_%:
 	sed -i  '10s/.*/	\$$readmemh\(\".\/test\/registers\/RV$(DATA_WIDTH)\/reg_$*.c\", registers\)\;/' ./test/$(TB_NAME).v 

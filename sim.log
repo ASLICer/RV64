@@ -1,7 +1,7 @@
 Command: /home/host/digital_ic/rv64-test/./simv -l sim.log +fsdb+functions
 Chronologic VCS simulator copyright 1991-2018
 Contains Synopsys proprietary information.
-Compiler version O-2018.09-1_Full64; Runtime version O-2018.09-1_Full64;  Sep 15 16:24 2024
+Compiler version O-2018.09-1_Full64; Runtime version O-2018.09-1_Full64;  Sep 15 17:30 2024
 VCD+ Writer O-2018.09-1_Full64 Copyright (c) 1991-2018 by Synopsys Inc.
 *Verdi* Loading libsscore_vcs201809.so
 FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
@@ -13,38 +13,38 @@ FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
 *Verdi* : End of traversing.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-regs[ 0] = 0x0000000000000000  correct_registers[ 0] = 0x0000000000000000
-regs[ 1] = 0x0000000000000033  correct_registers[ 1] = 0x0000000000000033
-regs[ 2] = 0x00000000000000fc  correct_registers[ 2] = 0x00000000000000fc
-regs[ 3] = 0x0000000000000030  correct_registers[ 3] = 0x0000000000000030
-regs[ 4] = 0x00000000000000ff  correct_registers[ 4] = 0x00000000000000ff
-regs[ 5] = 0x00000000000000cf  correct_registers[ 5] = 0x00000000000000cf
-regs[ 6] = 0x0000000000000030  correct_registers[ 6] = 0x0000000000000030
-regs[ 7] = 0x00000000000000ff  correct_registers[ 7] = 0x00000000000000ff
-regs[ 8] = 0x00000000000000cf  correct_registers[ 8] = 0x00000000000000cf
-regs[ 9] = 0x0000000000000000  correct_registers[ 9] = 0x0000000000000000
-regs[10] = 0x0000000000000000  correct_registers[10] = 0x0000000000000000
-regs[11] = 0x0000000000000000  correct_registers[11] = 0x0000000000000000
-regs[12] = 0x0000000000000000  correct_registers[12] = 0x0000000000000000
-regs[13] = 0x0000000000000000  correct_registers[13] = 0x0000000000000000
-regs[14] = 0x0000000000000000  correct_registers[14] = 0x0000000000000000
-regs[15] = 0x0000000000000000  correct_registers[15] = 0x0000000000000000
-regs[16] = 0x0000000000000000  correct_registers[16] = 0x0000000000000000
-regs[17] = 0x0000000000000000  correct_registers[17] = 0x0000000000000000
-regs[18] = 0x0000000000000000  correct_registers[18] = 0x0000000000000000
-regs[19] = 0x0000000000000000  correct_registers[19] = 0x0000000000000000
-regs[20] = 0x0000000000000000  correct_registers[20] = 0x0000000000000000
-regs[21] = 0x0000000000000000  correct_registers[21] = 0x0000000000000000
-regs[22] = 0x0000000000000000  correct_registers[22] = 0x0000000000000000
-regs[23] = 0x0000000000000000  correct_registers[23] = 0x0000000000000000
-regs[24] = 0x0000000000000000  correct_registers[24] = 0x0000000000000000
-regs[25] = 0x0000000000000000  correct_registers[25] = 0x0000000000000000
-regs[26] = 0x0000000000000000  correct_registers[26] = 0x0000000000000000
-regs[27] = 0x0000000000000000  correct_registers[27] = 0x0000000000000000
-regs[28] = 0x0000000000000000  correct_registers[28] = 0x0000000000000000
-regs[29] = 0x0000000000000000  correct_registers[29] = 0x0000000000000000
-regs[30] = 0x0000000000000000  correct_registers[30] = 0x0000000000000000
-regs[31] = 0x0000000000000000  correct_registers[31] = 0x0000000000000000
+regs[ 0] = 0x00000000  correct_registers[ 0] = 0x00000000
+regs[ 1] = 0x00000033  correct_registers[ 1] = 0x00000033
+regs[ 2] = 0x000000fc  correct_registers[ 2] = 0x000000fc
+regs[ 3] = 0x00000030  correct_registers[ 3] = 0x00000030
+regs[ 4] = 0x000000ff  correct_registers[ 4] = 0x000000ff
+regs[ 5] = 0x000000cf  correct_registers[ 5] = 0x000000cf
+regs[ 6] = 0x00000030  correct_registers[ 6] = 0x00000030
+regs[ 7] = 0x000000ff  correct_registers[ 7] = 0x000000ff
+regs[ 8] = 0x000000cf  correct_registers[ 8] = 0x000000cf
+regs[ 9] = 0x00000000  correct_registers[ 9] = 0x00000000
+regs[10] = 0x00000000  correct_registers[10] = 0x00000000
+regs[11] = 0x00000000  correct_registers[11] = 0x00000000
+regs[12] = 0x00000000  correct_registers[12] = 0x00000000
+regs[13] = 0x00000000  correct_registers[13] = 0x00000000
+regs[14] = 0x00000000  correct_registers[14] = 0x00000000
+regs[15] = 0x00000000  correct_registers[15] = 0x00000000
+regs[16] = 0x00000000  correct_registers[16] = 0x00000000
+regs[17] = 0x00000000  correct_registers[17] = 0x00000000
+regs[18] = 0x00000000  correct_registers[18] = 0x00000000
+regs[19] = 0x00000000  correct_registers[19] = 0x00000000
+regs[20] = 0x00000000  correct_registers[20] = 0x00000000
+regs[21] = 0x00000000  correct_registers[21] = 0x00000000
+regs[22] = 0x00000000  correct_registers[22] = 0x00000000
+regs[23] = 0x00000000  correct_registers[23] = 0x00000000
+regs[24] = 0x00000000  correct_registers[24] = 0x00000000
+regs[25] = 0x00000000  correct_registers[25] = 0x00000000
+regs[26] = 0x00000000  correct_registers[26] = 0x00000000
+regs[27] = 0x00000000  correct_registers[27] = 0x00000000
+regs[28] = 0x00000000  correct_registers[28] = 0x00000000
+regs[29] = 0x00000000  correct_registers[29] = 0x00000000
+regs[30] = 0x00000000  correct_registers[30] = 0x00000000
+regs[31] = 0x00000000  correct_registers[31] = 0x00000000
 ~~~~~~~~How many regs are correct?   32 ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~logic  INSTRUCTIONS TEST PASS ~~~~~~~~~~~
@@ -60,5 +60,5 @@ $finish called from file "./test/tb.v", line 68.
 $finish at simulation time                 1005
            V C S   S i m u l a t i o n   R e p o r t 
 Time: 1005 ns
-CPU Time:      0.210 seconds;       Data structure size:   0.0Mb
-Sun Sep 15 16:24:35 2024
+CPU Time:      0.180 seconds;       Data structure size:   0.0Mb
+Sun Sep 15 17:30:06 2024

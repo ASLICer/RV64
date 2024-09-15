@@ -2,11 +2,11 @@ Magic 271485
 Revision Verdi_O-2018.09-SP2
 
 ; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
-viewPort 0 27 900 254 100 65
+viewPort 0 27 756 190 100 65
 
 ; File list:
 ; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
-openDirFile -d / "" "/home/host/digital_ic/risc_v_5pipeline_64_cache/test.fsdb"
+openDirFile -d / "" "/home/host/digital_ic/risc_v_single_asl/test.fsdb"
 
 ; file time scale:
 ; fileTimeScale ### s|ms|us|ns|ps
@@ -16,7 +16,7 @@ signalSpacing 5
 
 ; windowTimeUnit is used for zoom, cursor & marker
 ; waveform viewport range
-zoom 0.000000 10.100000
+zoom 0.000000 101.505000
 cursor 0.000000
 marker 0.000000
 
