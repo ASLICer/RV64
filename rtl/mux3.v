@@ -1,13 +1,13 @@
-module mux3(
-	input	[31:0]	data1,
-	input	[31:0]	data2,
-	input	[31:0]	data3,
+module mux3 #(parameter WIDTH=8)(
+	input wire [WIDTH-1:0]d0,
+	input wire [WIDTH-1:0]d1,
+	input wire [WIDTH-1:0]d2,
+	input wire [1:0]s,
+	output wire[WIDTH-1:0]y
+);
 
-	input	[1:0]	sel,
-	output	[31:0]	dout
-);	
-
-assign	dout	=	sel[1]	? 	data1	:
-					sel[0]	?	data2	:	data3;
+assign y=(s==2'b00) ? d0 :
+		 (s==2'b01) ? d1 :
+		 (s==2'b10) ? d2 : d0;
 
 endmodule

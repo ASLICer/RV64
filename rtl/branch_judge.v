@@ -7,17 +7,16 @@ module branch_judge(
 	input			bgeu, 
 	input			jal,
 	input			jalr,
-	input			zero, 
-	input	[31:0]	ALU_result, 
-	output	[1:0]	jump_sel
+	input	[31:0]	subout, 
+	output	[1:0]	pc_sel
 );
 wire b_jal;
 
 //target address:PC+imme
-assign	b_jal	=		(beq	&	zero)			|
-						(bne	&	~zero)			|
-						((blt|bltu)	&	ALU_result)	|
-						((bge|bgeu)	&	~ALU_result)|
+assign	b_jal	=		(beq	&	~|subout)			|
+						(bne	&	|subout)			|
+						((blt|bltu)	&	subout[31])		|
+						((bge|bgeu)	&	~subout[31])	|
 						jal;
-assign jump_sel = {b_jal,jalr};
+assign pc_sel = {b_jal,jalr};
 endmodule

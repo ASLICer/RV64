@@ -3,28 +3,37 @@ Command arguments:
     +define+verilog
     -sv
     -f filelist
-        ./rtl/timescale.v
-        ./rtl/pc_reg.v
-        ./rtl/registers.v
-        ./rtl/tb.v
-        ./rtl/data_memory.v
-        ./rtl/mux.v
-        ./rtl/define.v
-        ./rtl/Adder.v
-        ./rtl/cla_adder32.v
-        ./rtl/alu.v
-        ./rtl/riscv_top.v
+        ./rtl/branch_judge.v
         ./rtl/Shifter.v
         ./rtl/instr_decode.v
+        ./rtl/registers.v
         ./rtl/instr_memory.v
-        ./rtl/alu_control.v
-        ./rtl/control.v
-        ./rtl/branch_judge.v
-        ./rtl/main_control.v
-        ./rtl/risc.v
-        ./rtl/datapath.v
+        ./rtl/adder.v
         ./rtl/mux3.v
-        ./rtl/mux5.v
+        ./rtl/Adder.v
+        ./rtl/mux2.v
+        ./rtl/mux_wr_reg.v
+        ./rtl/mux_pc.v
+        ./rtl/dff_r.v
+        ./rtl/ID_EX.v
+        ./rtl/IF_ID.v
+        ./rtl/control.v
+        ./rtl/alu_control.v
+        ./rtl/pc_reg.v
+        ./rtl/dff_enrc.v
+        ./rtl/data_memory.v
+        ./rtl/define.v
+        ./rtl/mux_fw_resM.v
+        ./rtl/EX_MEM.v
+        ./rtl/hazard.v
+        ./rtl/dff_rc.v
+        ./rtl/MEM_WB.v
+        ./rtl/riscv_top.v
+        ./rtl/main_control.v
+        ./rtl/alu.v
+        ./rtl/riscv.v
+        ./rtl/datapath.v
+        ./test/tb.v
 
 Highest level modules:
 tb

@@ -11,12 +11,12 @@ module data_memory(
 
 reg [31:0]ram[255:0];
 
-wire [31:0]RD_data;
+wire [31:0]RD_data;//写地址所在字，根据写类型对整个字进行拼接
 assign RD_data=ram[addr[31:2]];
 
-reg [31:0]wr_data_b;
-reg [31:0]wr_data_h;
-wire[31:0]wr_data_w;
+reg [31:0]wr_data_b;//拼接字节后的字
+reg [31:0]wr_data_h;//拼接半字后的字
+wire[31:0]wr_data_w;//不用拼接的字
 assign wr_data_w=WD;
 
 reg [31:0]wr_data;
@@ -45,8 +45,12 @@ always@(*)begin
 	endcase
 end
 
-always@(posedge clk)begin
-	if(W_en)
+integer i;
+always@(posedge clk,negedge rst_n)begin
+	if(!rst_n)
+		for(i=0;i<255;i=i+1)
+			ram[i]<=32'b0;
+	else if(W_en)
 		ram[addr[31:2]]<=wr_data;
 	else
 		ram[addr[31:2]]<=ram[addr[31:2]];
@@ -57,8 +61,8 @@ reg [15:0]rd_data_h;
 wire[31:0]rd_data_w;
 assign rd_data_w=RD_data;
 
-reg [31:0]rd_data_b_ext;
-reg [31:0]rd_data_h_ext;
+reg [31:0]rd_data_b_ext;//扩展成32bit
+reg [31:0]rd_data_h_ext;//扩展成32bit
 
 always@(*)begin
 	case(addr[1:0])
@@ -73,21 +77,21 @@ always@(*)begin
 	case(addr[1])
 		1'b0:rd_data_h=RD_data[15:0];
 		1'b1:rd_data_h=RD_data[31:16];
-		endcase
+	endcase
 end
 
 always@(*)begin
 	case(RW_type[2])
-		1'b0:rd_data_b_ext={{24{rd_data_b[7]}},rd_data_b};
-		1'b1:rd_data_b_ext={24'b0,rd_data_b};
-		endcase
+		1'b0:rd_data_b_ext={{24{rd_data_b[7]}},rd_data_b};//符号扩展
+		1'b1:rd_data_b_ext={24'b0,rd_data_b};//无符号扩展
+	endcase
 end
 
 always@(*)begin
 	case(RW_type[2])
-		1'b0:rd_data_h_ext={{16{rd_data_h[15]}},rd_data_h};
-		1'b1:rd_data_h_ext={16'b0,rd_data_h};
-		endcase
+		1'b0:rd_data_h_ext={{16{rd_data_h[15]}},rd_data_h};//符号扩展
+		1'b1:rd_data_h_ext={16'b0,rd_data_h};//无符号扩展
+	endcase
 end
 
 always@(*)begin

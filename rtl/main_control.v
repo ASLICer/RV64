@@ -1,12 +1,12 @@
 module main_control(
 	input	[6:0]	opcode,
 	input	[2:0]	func3,
-	output	[1:0]	ALUop,
-	output			Memread,
-	output			Memtoreg,
-	output			Memwrite,
-	output			ALUsrc,
-	output			Regwrite,
+	output	[1:0]	aluop,
+	output			memread,
+	output			memtoreg,
+	output			memwrite,
+	output			alusrc,
+	output			regwrite,
 	output			lui,
 	output			auipc,
 	output			jal,
@@ -20,13 +20,13 @@ module main_control(
 	output	[2:0]	RW_type
 );
 
-wire	branch;
+wire	B_type;
 wire	R_type;
-wire	I_type;
+wire	I_type;//here don't include load and jalr
 wire	load;
 wire	store;
-
-assign 	branch	=(opcode==`B_type)	? 1'b1 : 1'b0;
+//9 types of opcode
+assign 	B_type	=(opcode==`B_type)	? 1'b1 : 1'b0;
 assign 	R_type	=(opcode==`R_type) 	? 1'b1 : 1'b0;
 assign 	I_type	=(opcode==`I_type)	? 1'b1 : 1'b0;
 assign 	load	=(opcode==`load) 	? 1'b1 : 1'b0;
@@ -37,26 +37,28 @@ assign	jalr	=(opcode==`jalr)	? 1'b1 : 1'b0;
 assign	lui		=(opcode==`lui)		? 1'b1 : 1'b0;
 assign	auipc	=(opcode==`auipc)	? 1'b1 : 1'b0;
 
-assign	beq		=branch & (func3==3'b000);
-assign	bne		=branch & (func3==3'b001);
-assign	blt		=branch & (func3==3'b100);
-assign	bge		=branch & (func3==3'b101);
-assign	bltu	=branch & (func3==3'b110);
-assign	bgeu	=branch & (func3==3'b111);
+assign	beq		=B_type & (func3==3'b000);
+assign	bne		=B_type & (func3==3'b001);
+assign	blt		=B_type & (func3==3'b100);
+assign	bge		=B_type & (func3==3'b101);
+assign	bltu	=B_type & (func3==3'b110);
+assign	bgeu	=B_type & (func3==3'b111);
 
 assign	RW_type	=func3;
 
 //enable
-assign 	Memread	=load;
-assign 	Memwrite=store;
-assign 	Regwrite=jal|jalr|load|I_type|R_type|lui|auipc;
+assign 	memread	=load;
+assign 	memwrite=store;
+assign 	regwrite=jal|jalr|load|I_type|R_type|lui|auipc;//S_type,B_type don't need to write back
 
 //mux
-assign 	ALUsrc	=load|store|I_type|jalr;//select imme
-assign 	Memtoreg=load;//select data_memory data
+assign 	alusrc	=load|store|I_type|jalr;//select imme as the second source data of alu
+assign 	memtoreg=load;//select data_memory data to write back
 
-//ALUop
-assign 	ALUop[1]=R_type|branch;//R 10,I 01,B 11,lw/sw 00
-assign 	ALUop[0]=I_type|branch;
+//aluop(self define),R 10,I 01,B 11,load/store 00
+//load/stor use alu to calculate address of data_memory
+//lui/auipc/jalr/jal don't need alu
+assign 	aluop[1]=R_type|B_type;
+assign 	aluop[0]=I_type|B_type;
 
 endmodule

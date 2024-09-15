@@ -1,7 +1,7 @@
 rc file Version 1.0
 
 [Design]
-COMPILE_PATH=/home/host/digital_ic/rv64-test
+COMPILE_PATH=/home/host/digital_ic/rv64-all
 SystemC=FALSE
 UUM=FALSE
 KDB=FALSE

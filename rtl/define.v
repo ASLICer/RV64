@@ -17,7 +17,6 @@
 `define 	AND  			4'b0100
 `define 	OR   			4'b0101
 `define 	XOR  			4'b0110
-`define 	NOR  			4'b0111
 `define 	SLTU 			4'b1000
 `define 	SLT  			4'b1001
 `define 	SLL  			4'b1100

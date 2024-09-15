@@ -7,7 +7,6 @@ cs_all:
 	make cs_shift
 	make cs_slt
 	make cs_u_type
-
 ver_%:
 	make change_tb_$* 
 	make ver
@@ -19,18 +18,18 @@ cs_%:
 	make change_tb_$*
 	make cs
 
-DATA_WIDTH=32
 TB_NAME=tb
 change_tb_%:
-	sed -i  '10s/.*/	\$$readmemh\(\".\/test\/registers\/RV$(DATA_WIDTH)\/reg_$*.c\", registers\)\;/' ./test/$(TB_NAME).v 
-	sed -i  '11s/.*/	\$$readmemb\(\".\/test\/instructions\/RV$(DATA_WIDTH)\/$*.c\", riscv_top_u1.instr_memory_inst.rom\)\;/' ./test/$(TB_NAME).v 
-	sed -i  '47s/.*/            \$$display\(\"~~~~~~~~$*  INSTRUCTIONS TEST PASS ~~~~~~~~~~~"\)\;/' ./test/$(TB_NAME).v 
-	sed -i  '58s/.*/            \$$display\(\"~~~~~~~~$*  INSTRUCTIONS TEST FAIL ~~~~~~~~~~~"\)\;/' ./test/$(TB_NAME).v 
+	sed -i  '10s/.*/	\$$readmemh\(\".\/test\/registers\/reg_$*.c\", registers\)\;/' ./test/$(TB_NAME).v 
+	sed -i  '11s/.*/	\$$readmemb\(\".\/test\/instructions\/$*.c\", riscv_top_u1.instr_memory_inst.rom\)\;/' ./test/$(TB_NAME).v 
+	sed -i  '44s/.*/            \$$display\(\"~~~~~~~~$*  INSTRUCTIONS TEST PASS ~~~~~~~~~~~"\)\;/' ./test/$(TB_NAME).v 
+	sed -i  '55s/.*/            \$$display\(\"~~~~~~~~$*  INSTRUCTIONS TEST FAIL ~~~~~~~~~~~"\)\;/' ./test/$(TB_NAME).v 
 
 
 ver : com sim run_verdi 
 dve : com sim run_dve
 cs: com sim
+
 
 com:
 	vcs -sverilog \
@@ -40,7 +39,6 @@ com:
 	-timescale=1ns/1ns \
 	-f filelist \
 	-l com.log \
-	+define+DATA_WIDTH=$(DATA_WIDTH)
 	 
 	
 sim:
@@ -61,3 +59,4 @@ mv:
 
 find:
 	find  -name "*.v">filelist
+

@@ -5,6 +5,8 @@ module instr_memory(
 
 reg [31:0] rom [255:0];
 
+
+
 assign instr=rom[addr];
 
 endmodule

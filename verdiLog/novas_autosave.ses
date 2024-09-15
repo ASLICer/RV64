@@ -18,16 +18,16 @@ AnnotationShow = 0
 Console = FALSE
 powerDumped = 0
 [hb]
-postSimFile = /home/host/digital_ic/risc_v_single_asl/test.fsdb
+postSimFile = /home/host/digital_ic/risc_v_5pipeline/test.fsdb
 syncTime = 0
-viewport = 0 27 756 813 0 0 164 754
+viewport = 399 101 900 700 0 0 228 898
 activeNode = "tb"
 activeScope = "tb"
-activeFile = "./rtl/tb.v"
+activeFile = "./test/tb.v"
 interactiveMode = False
 viewType = Source
 simulatorMode = False
-sourceBeginLine = 1
+sourceBeginLine = 0
 baMode = False
 srcLineNum = True
 AutoWrap = True
@@ -45,24 +45,24 @@ traceIncTopPort = False
 leadingZero = False
 signalPane = False
 Scope1 = "tb"
-multipleSelection = 1 1 2 0 0
+multipleSelection = 1 0 2 0 0
 sdfCheckUndef = FALSE
 simFlow = FALSE
 [hb.design]
 importCmd = "-sv" "-f" "filelist" 
-invokeDir = /home/host/digital_ic/risc_v_single_asl
+invokeDir = /home/host/digital_ic/risc_v_5pipeline
 [hb.sourceTab.1]
 scope = tb
-File = /home/host/digital_ic/risc_v_single_asl/rtl/tb.v
-Line = 2
+File = /home/host/digital_ic/risc_v_5pipeline/test/tb.v
+Line = 1
 [nMemoryManager]
-WaveformFile = /home/host/digital_ic/risc_v_single_asl/test.fsdb
+WaveformFile = /home/host/digital_ic/risc_v_5pipeline/test.fsdb
 UserActionNum = 0
 nMemWindowNum = 0
 [wave.0]
-viewPort = 0 27 756 190 100 65
+viewPort = 0 27 900 254 100 65
 primaryWindow = TRUE
-SessionFile = /home/host/digital_ic/risc_v_single_asl/verdiLog/novas_autosave.ses.wave.0
+SessionFile = /home/host/digital_ic/risc_v_5pipeline/verdiLog/novas_autosave.ses.wave.0
 displayGrid = FALSE
 hierarchicalName = FALSE
 snap = TRUE

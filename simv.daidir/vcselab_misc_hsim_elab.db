@@ -1,6 +1,6 @@
 psSimBaseName                      	simv
 psLogFileName                      	com.log
-pDaiDir                            	/home/host/digital_ic/rv64-test/simv.daidir
+pDaiDir                            	/home/host/digital_ic/rv64-all/simv.daidir
 destPath                           	csrc/
 fSharedMaster                      	0
 fHsimPCSharedLibSpecified          	0

@@ -140,18 +140,17 @@ VCS compile option:
  option[27]: +itf+/home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/vcsdp_lite.tab
  option[28]: -debug_access+dmptf
  option[29]: -timescale=1ns/1ns
- option[30]: +define+DATA_WIDTH=32
- option[31]: -picarchive
- option[32]: -P
- option[33]: /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
- option[34]: -fsdb
- option[35]: -sverilog
- option[36]: -gen_obj
- option[37]: -f
- option[38]: filelist
- option[39]: -load
- option[40]: /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/libnovas.so:FSDBDumpCmd
- option[41]: timescale=1ns/1ns
+ option[30]: -picarchive
+ option[31]: -P
+ option[32]: /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
+ option[33]: -fsdb
+ option[34]: -sverilog
+ option[35]: -gen_obj
+ option[36]: -f
+ option[37]: filelist
+ option[38]: -load
+ option[39]: /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/libnovas.so:FSDBDumpCmd
+ option[40]: timescale=1ns/1ns
 Chronologic Simulation VCS Release O-2018.09-1_Full64
 Linux 3.10.0-1160.53.1.el7.x86_64 #1 SMP Fri Jan 14 13:59:45 UTC 2022 x86_64
 CPU cores: 8
@@ -174,7 +173,7 @@ Runtime environment variables:
 DESKTOP_SESSION=gnome-classic
 XDG_SESSION_TYPE=x11
 MGC_CALIBRE_SCHEMATIC_SERVER=127.0.0.1:9199
-XAUTHORITY=/run/gdm/auth-for-host-QkACNP/database
+XAUTHORITY=/run/gdm/auth-for-host-4jjCv5/database
 GDMSESSION=gnome-classic
 XMODIFIERS=@im=ibus
 SHELL=/bin/bash
@@ -196,7 +195,7 @@ PATH=/home/Xilinx/SDK/2019.1/bin:/home/Xilinx/SDK/2019.1/gnu/microblaze/lin/bin:
 PT_HOME=/home/synopsys/pts/O-2018.06-SP1
 XILINX_VIVADO=/home/Xilinx/Vivado/2019.1
 IDENTIFY_HOME=/home/synopsys/identify/N-2018.03-SP1
-SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/3130,unix/unix:/tmp/.ICE-unix/3130
+SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/3353,unix/unix:/tmp/.ICE-unix/3353
 XDG_RUNTIME_DIR=/run/user/1001
 ICC_HOME=/home/synopsys/icc/O-2018.06-SP1
 XDG_MENU_PREFIX=gnome-
@@ -211,16 +210,16 @@ MGC_HOME=/home/mentor//calibre2019/aoj_cal_2019.3_15.11
 IMSETTINGS_INTEGRATE_DESKTOP=yes
 HOME=/home/host
 VCS_HOME=/home/synopsys/vcs-mx/O-2018.09-1
-PWD=/home/host/digital_ic/rv64-test
+PWD=/home/host/digital_ic/rv64-all
 MGC_LICENSE_FILE=/home/mentor//license/license.dat
 NLINT_HOME=/home/synopsys/nlint
 XDG_SEAT=seat0
-SSH_AGENT_PID=3264
+SSH_AGENT_PID=3486
 CALIBRE_HOME=/home/mentor//calibre2019/aoj_cal_2019.3_15.11
 MGC_CALIBRE_REALTIME_VIRTUOSO_ENABLED=1
 VERDI_HOME=/home/synopsys/verdi/Verdi_O-2018.09-SP2
 MGLS_LICENSE_FILE=/home/mentor//license/license.dat:/home/mentor/questasim/mentor.dat
-DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-2KSNgcgvw1,guid=68e3446f3bbeb1ecabc3ef2166cb4681
+DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Qj0kuyD5Lu,guid=f74d446c3772337329309a2266e6b84f
 LD_LIBRARY_PATH=/home/mentor//calibre2019/aoj_cal_2019.3_15.11/shared/pkgs/icv/tools/calibre_client/lib/64:/home/cadence/INCISIVE152/tools.lnx86/lib
 RISCV=/home/Riscv_Tools
 SPECMAN_HOME=/home/cadence/INCISIVE152/components/sn
@@ -254,7 +253,7 @@ MAKEFLAGS=w
 MFLAGS=-w
 MAIL=/var/spool/mail/host
 SPYGLASS_HOME=/home/synopsys/SpyGlass-L2016.06/SPYGLASS_HOME/
-MAKE_TERMOUT=/dev/pts/4
+MAKE_TERMOUT=/dev/pts/0
 DC_HOME=/home/synopsys/syn/O-2018.06-SP1
 MILKWAY_HOME=/home/synopsys/milkway_201506
 CADHOME=/home/cadence
@@ -268,20 +267,20 @@ PS1=[\u@\h `pwd`]\$
 NOVAS_HOME=/home/synopsys/verdi/Verdi_O-2018.09-SP2
 DBUS_STARTER_BUS_TYPE=session
 SCL_HOME=/home/synopsys/scl/2018.06
-GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/b175d770_cd5c_4c6d_a87c_a720cfa5840c
+GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/e11bf68f_d466_423a_9a1c_43b235e234ce
 GNOME_TERMINAL_SERVICE=:1.105
 HISTSIZE=1000
 QEMU_HOME=/home/Riscv_Tools/riscv-gnu-toolchain/qemu-6.0.0
 WINDOWPATH=1
 QTINC=/usr/lib/qt-3.3/include
 QTDIR=/usr/lib/qt-3.3
-MAKE_TERMERR=/dev/pts/4
+MAKE_TERMERR=/dev/pts/0
 LANG=zh_CN.UTF-8
 MGC_CALIBRE_SAVE_ALL_RUNSET_VALUES=1
 CALIBRE_ENABLE_SKILL_PEXBA_MODE=1
 CX_HOME=/home/synopsys/wv/N-2017.12-SP2
-DBUS_STARTER_ADDRESS=unix:abstract=/tmp/dbus-2KSNgcgvw1,guid=68e3446f3bbeb1ecabc3ef2166cb4681
-MAKELEVEL=2
+DBUS_STARTER_ADDRESS=unix:abstract=/tmp/dbus-Qj0kuyD5Lu,guid=f74d446c3772337329309a2266e6b84f
+MAKELEVEL=3
 VCS_HEAP_EXEC=true
 VCS_PATHMAP_PRELOAD_DONE=1
 VCS_STACK_EXEC=true
@@ -294,64 +293,64 @@ argv[0]=./simv
 argv[1]=-l
 argv[2]=sim.log
 argv[3]=+fsdb+functions
-296 profile - 100
-          CPU/Mem usage: 0.000 sys,  0.130 user,  262.30M mem
-297 Sun Sep 15 17:30:06 2024
-298 pliAppInit
-299 FSDB_GATE is set.
-300 FSDB_RTL is set.
-301 Enable Parallel Dumping.
-302 pliAppMiscSet: New Sim Round
-303 pliEntryInit
-304 LIBSSCORE=found /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/lib/LINUXAMD64/libsscore_vcs201809.so through $NOVAS_HOME setting.
-305 FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
-306 (C) 1996 - 2019 by Synopsys, Inc.
-307 sps_call_fsdbDumpfile_main at 0 : ./test/tb.v(85)
-308 argv[0]: (test.fsdb)
-309 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
-310 *Verdi* : Create FSDB file 'test.fsdb'
-311 compile option from '/home/host/digital_ic/rv64-test/simv.daidir/vcs_rebuild'.
-312   "vcs '-sverilog' '-full64' '-debug_acc+all' '-debug_access+dmptf' '-timescale=1ns/1ns' '-f' 'filelist' '-l' 'com.log' '+define+DATA_WIDTH=32' 2>&1"
-313 FSDB_VCS_ENABLE_FAST_VC is enable
-314 sps_call_fsdbDumpvars_vd_main at 0 : ./test/tb.v(86)
-315 argv[0]: (0)
-316 argv[1]: (handle) tb
-317 argv[2]: (+all)
-318 [spi_vcs_vd_ppi_create_root]: no upf option
-319 FSDB dumper cannot dump UPF related power signal ($power_tree): no ppiPowerNetwork.
-320 *Verdi* : Begin traversing the scope (tb), layer (0).
-321 *Verdi* : Enable +all and +functions dumping.
-322 *Verdi* : End of traversing.
-323 pliAppHDL_DumpVarComplete traverse var: profile - 
-          CPU/Mem usage: 0.030 sys,  0.140 user,  358.25M mem
-                   incr: 0.000 sys,  0.000 user,  8.08M mem
-                   accu: 0.000 sys,  0.000 user,  8.08M mem
-              accu incr: 0.000 sys,  0.000 user,  8.08M mem
+295 profile - 100
+          CPU/Mem usage: 0.010 sys,  0.130 user,  282.64M mem
+296 Sun Sep 15 18:38:05 2024
+297 pliAppInit
+298 FSDB_GATE is set.
+299 FSDB_RTL is set.
+300 Enable Parallel Dumping.
+301 pliAppMiscSet: New Sim Round
+302 pliEntryInit
+303 LIBSSCORE=found /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/lib/LINUXAMD64/libsscore_vcs201809.so through $NOVAS_HOME setting.
+304 FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
+305 (C) 1996 - 2019 by Synopsys, Inc.
+306 sps_call_fsdbDumpfile_main at 0 : ./test/tb.v(82)
+307 argv[0]: (test.fsdb)
+308 *Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
+309 *Verdi* : Create FSDB file 'test.fsdb'
+310 compile option from '/home/host/digital_ic/rv64-all/simv.daidir/vcs_rebuild'.
+311   "vcs '-sverilog' '-full64' '-debug_acc+all' '-debug_access+dmptf' '-timescale=1ns/1ns' '-f' 'filelist' '-l' 'com.log' 2>&1"
+312 FSDB_VCS_ENABLE_FAST_VC is enable
+313 sps_call_fsdbDumpvars_vd_main at 0 : ./test/tb.v(83)
+314 argv[0]: (0)
+315 argv[1]: (handle) tb
+316 argv[2]: (+all)
+317 [spi_vcs_vd_ppi_create_root]: no upf option
+318 FSDB dumper cannot dump UPF related power signal ($power_tree): no ppiPowerNetwork.
+319 *Verdi* : Begin traversing the scope (tb), layer (0).
+320 *Verdi* : Enable +all and +functions dumping.
+321 *Verdi* : End of traversing.
+322 pliAppHDL_DumpVarComplete traverse var: profile - 
+          CPU/Mem usage: 0.030 sys,  0.140 user,  378.48M mem
+                   incr: 0.010 sys,  0.000 user,  8.04M mem
+                   accu: 0.010 sys,  0.000 user,  8.04M mem
+              accu incr: 0.010 sys,  0.000 user,  8.04M mem
 
-          Count usage: 837 var,  727 idcode,  35 callback
-                 incr: 837 var,  727 idcode,  35 callback
-                 accu: 837 var,  727 idcode,  35 callback
-            accu incr: 837 var,  727 idcode,  35 callback
-324 Sun Sep 15 17:30:06 2024
-325 pliAppHDL_DumpVarComplete: profile - 
-          CPU/Mem usage: 0.030 sys,  0.140 user,  359.30M mem
+          Count usage: 1179 var,  828 idcode,  87 callback
+                 incr: 1179 var,  828 idcode,  87 callback
+                 accu: 1179 var,  828 idcode,  87 callback
+            accu incr: 1179 var,  828 idcode,  87 callback
+323 Sun Sep 15 18:38:05 2024
+324 pliAppHDL_DumpVarComplete: profile - 
+          CPU/Mem usage: 0.030 sys,  0.140 user,  379.54M mem
                    incr: 0.000 sys,  0.000 user,  1.05M mem
-                   accu: 0.000 sys,  0.000 user,  9.13M mem
+                   accu: 0.010 sys,  0.000 user,  9.09M mem
               accu incr: 0.000 sys,  0.000 user,  1.05M mem
 
-          Count usage: 837 var,  727 idcode,  35 callback
+          Count usage: 1179 var,  828 idcode,  87 callback
                  incr: 0 var,  0 idcode,  0 callback
-                 accu: 837 var,  727 idcode,  35 callback
+                 accu: 1179 var,  828 idcode,  87 callback
             accu incr: 0 var,  0 idcode,  0 callback
-326 Sun Sep 15 17:30:06 2024
-327 End of simulation at 1005
-328 Sun Sep 15 17:30:06 2024
-329 Begin FSDB profile info:
-330 FSDB Writer : bc1(106) bcn(870) mtf/stf(0/0)
-FSDB Writer elapsed time : flush(0.001769) io wait(0.000000) theadpool wait(0.000000) target functin(0.000000)
+325 Sun Sep 15 18:38:05 2024
+326 End of simulation at 1005
+327 Sun Sep 15 18:38:05 2024
+328 Begin FSDB profile info:
+329 FSDB Writer : bc1(178) bcn(1736) mtf/stf(0/0)
+FSDB Writer elapsed time : flush(0.002371) io wait(0.000000) theadpool wait(0.000000) target functin(0.000000)
 FSDB Writer cpu time : MT Compression : 0
-331 End FSDB profile info
-332 Parallel profile    -  Flush:3 Expand:0 ProduceWait:0 ConsumerWait:0 BlockUsed:0
-333                        ProduceTime:0.182182970 ConsumerTime:0.000000000 Buffer:64MB
-334 SimExit
-335 Sim process exit
+330 End FSDB profile info
+331 Parallel profile    -  Flush:3 Expand:0 ProduceWait:0 ConsumerWait:0 BlockUsed:0
+332                        ProduceTime:0.180030154 ConsumerTime:0.000000000 Buffer:64MB
+333 SimExit
+334 Sim process exit

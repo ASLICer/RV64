@@ -12,7 +12,9 @@ module riscv_top(
 	wire W_en;
 	wire R_en;
 	wire [2:0]RW_type;
-	
+	wire [31:0]rom_addr_1;
+
+	assign	rom_addr=rom_addr_1[9:2];
 	instr_memory instr_memory_inst (
     .addr(rom_addr), 
     .instr(instr)
@@ -23,7 +25,7 @@ module riscv_top(
     .rst_n(rst_n), 
     .instr(instr), 
     .Rd_mem_data(Rd_mem_data), 
-    .rom_addr(rom_addr), 
+    .rom_addr(rom_addr_1), 
     .Wr_mem_data(Wr_mem_data), 
     .W_en(W_en), 
     .R_en(R_en), 
