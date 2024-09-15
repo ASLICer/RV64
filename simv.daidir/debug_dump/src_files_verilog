@@ -1,5 +1,0 @@
-/home/host/digital_ic/RV64/rtl/define.v
-/home/host/digital_ic/RV64/rtl/instr_decode.v
-/home/host/digital_ic/RV64/rtl/rename.v
-/home/host/digital_ic/RV64/test/instr_buffer.v
-/home/host/digital_ic/RV64/test/tb_decode_rename.v
