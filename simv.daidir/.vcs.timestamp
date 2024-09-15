@@ -34,7 +34,7 @@
 /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
 com.log
 106
-sysc_uni_pwd=/home/host/digital_ic/rv64-all
+sysc_uni_pwd=/home/host/digital_ic/risc_v_5pipeline
 novas_args=-P /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/novas.tab /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/pli.a
 XMODIFIERS=@im=ibus
 XILINX_VIVADO=/home/Xilinx/Vivado/2019.1
@@ -142,38 +142,38 @@ CALIBRE_ENABLE_SKILL_PEXBA_MODE=1
 CADHOME=/home/cadence
 0
 34
-1726396684 ./test/tb.v
-1726396673 ./rtl/datapath.v
-1726396673 ./rtl/riscv.v
-1726396673 ./rtl/alu.v
-1726396673 ./rtl/main_control.v
-1726396673 ./rtl/riscv_top.v
-1726396673 ./rtl/MEM_WB.v
-1726396673 ./rtl/dff_rc.v
-1726396673 ./rtl/hazard.v
-1726396673 ./rtl/EX_MEM.v
-1726396673 ./rtl/mux_fw_resM.v
-1726396673 ./rtl/define.v
-1726396673 ./rtl/data_memory.v
-1726396673 ./rtl/dff_enrc.v
-1726396673 ./rtl/pc_reg.v
-1726396673 ./rtl/alu_control.v
-1726396673 ./rtl/control.v
-1726396673 ./rtl/IF_ID.v
-1726396673 ./rtl/ID_EX.v
-1726396673 ./rtl/dff_r.v
-1726396673 ./rtl/mux_pc.v
-1726396673 ./rtl/mux_wr_reg.v
-1726396673 ./rtl/mux2.v
-1726396673 ./rtl/Adder.v
-1726396673 ./rtl/mux3.v
-1726396673 ./rtl/adder.v
-1726396673 ./rtl/instr_memory.v
-1726396673 ./rtl/registers.v
-1726396673 ./rtl/instr_decode.v
-1726396673 ./rtl/Shifter.v
-1726396673 ./rtl/branch_judge.v
-1726396673 filelist
+1726396597 ./test/tb.v
+1719476163 ./rtl/datapath.v
+1719302030 ./rtl/riscv.v
+1722782277 ./rtl/alu.v
+1718892297 ./rtl/main_control.v
+1713774956 ./rtl/riscv_top.v
+1713707910 ./rtl/MEM_WB.v
+1713778711 ./rtl/dff_rc.v
+1722442309 ./rtl/hazard.v
+1719293992 ./rtl/EX_MEM.v
+1719135190 ./rtl/mux_fw_resM.v
+1718941378 ./rtl/define.v
+1718876720 ./rtl/data_memory.v
+1718723626 ./rtl/dff_enrc.v
+1715748233 ./rtl/pc_reg.v
+1722423794 ./rtl/alu_control.v
+1719491237 ./rtl/control.v
+1713707913 ./rtl/IF_ID.v
+1713707904 ./rtl/ID_EX.v
+1713718629 ./rtl/dff_r.v
+1713704391 ./rtl/mux_pc.v
+1713704391 ./rtl/mux_wr_reg.v
+1713704391 ./rtl/mux2.v
+1713704391 ./rtl/Adder.v
+1713704391 ./rtl/mux3.v
+1713704391 ./rtl/adder.v
+1713704391 ./rtl/instr_memory.v
+1713704391 ./rtl/registers.v
+1713704391 ./rtl/instr_decode.v
+1713704391 ./rtl/Shifter.v
+1713704391 ./rtl/branch_judge.v
+1722411901 filelist
 1550753332 /home/synopsys/verdi/Verdi_O-2018.09-SP2/share/PLI/VCS/LINUX64/verdi.tab
 1539400757 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/vcsdp_lite.tab
 4
@@ -181,5 +181,5 @@ CADHOME=/home/cadence
 1539401183 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/liberrorinf.so
 1539401125 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/libsnpsmalloc.so
 1539401175 /home/synopsys/vcs-mx/O-2018.09-1/linux64/lib/libvfs.so
-1726396684 simv.daidir
+1726396597 simv.daidir
 -1 partitionlib

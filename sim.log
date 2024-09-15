@@ -1,14 +1,7 @@
-Command: /home/host/digital_ic/rv64-all/./simv -l sim.log +fsdb+functions
+Command: /home/host/digital_ic/risc_v_5pipeline/./simv -l sim.log +fsdb+functions
 Chronologic VCS simulator copyright 1991-2018
 Contains Synopsys proprietary information.
-Compiler version O-2018.09-1_Full64; Runtime version O-2018.09-1_Full64;  Sep 15 18:38 2024
-
-Warning-[STASKW_RMPMEOFAL] Premature end of file
-./test/tb.v, 11
-  Premature end of file ./test/instructions/slt.c at line 57, while executing 
-  $readmem.
-  Please ensure that the file has proper entries.
-
+Compiler version O-2018.09-1_Full64; Runtime version O-2018.09-1_Full64;  Sep 15 18:36 2024
 VCD+ Writer O-2018.09-1_Full64 Copyright (c) 1991-2018 by Synopsys Inc.
 *Verdi* Loading libsscore_vcs201809.so
 FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
@@ -21,24 +14,24 @@ FSDB Dumper for VCS, Release Verdi_O-2018.09-SP2, Linux x86_64/64bit, 02/21/2019
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 regs[ 0] = 0x00000000
-regs[ 1] = 0xffffffff
-regs[ 2] = 0xfffffffe
-regs[ 3] = 0x00000003
-regs[ 4] = 0x00000004
-regs[ 5] = 0x00000000
-regs[ 6] = 0x00000001
-regs[ 7] = 0x00000001
+regs[ 1] = 0xfffff000
+regs[ 2] = 0x000000ff
+regs[ 3] = 0x00000fff
+regs[ 4] = 0xffffffff
+regs[ 5] = 0x00fff014
+regs[ 6] = 0x00000000
+regs[ 7] = 0x00000000
 regs[ 8] = 0x00000000
 regs[ 9] = 0x00000000
-regs[10] = 0x00000001
+regs[10] = 0x00000000
 regs[11] = 0x00000000
 regs[12] = 0x00000000
-regs[13] = 0x00000001
-regs[14] = 0x00000001
+regs[13] = 0x00000000
+regs[14] = 0x00000000
 regs[15] = 0x00000000
-regs[16] = 0x00000001
-regs[17] = 0x00000001
-regs[18] = 0x00000001
+regs[16] = 0x00000000
+regs[17] = 0x00000000
+regs[18] = 0x00000000
 regs[19] = 0x00000000
 regs[20] = 0x00000000
 regs[21] = 0x00000000
@@ -54,7 +47,7 @@ regs[30] = 0x00000000
 regs[31] = 0x00000000
 ~~~~~~~~How many regs are correct?   32 ~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~slt  INSTRUCTIONS TEST PASS ~~~~~~~~~~~
+~~~~~~~~u_type  INSTRUCTIONS TEST PASS ~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~ #####     ##     ####    #### ~~~~~~~~~
 ~~~~~~~~~ #    #   #  #   #       #     ~~~~~~~~~
@@ -67,5 +60,5 @@ $finish called from file "./test/tb.v", line 65.
 $finish at simulation time                 1005
            V C S   S i m u l a t i o n   R e p o r t 
 Time: 1005 ns
-CPU Time:      0.170 seconds;       Data structure size:   0.0Mb
-Sun Sep 15 18:38:05 2024
+CPU Time:      0.150 seconds;       Data structure size:   0.0Mb
+Sun Sep 15 18:36:38 2024
