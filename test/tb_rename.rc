@@ -1,0 +1,171 @@
+Magic 271485
+Revision Verdi_O-2018.09-SP2
+
+; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
+viewPort 0 27 1718 683 345 65
+
+; File list:
+; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
+openDirFile -d / "" "/home/host/digital_ic/RV64/test/rename.fsdb"
+
+; file time scale:
+; fileTimeScale ### s|ms|us|ns|ps
+
+; signal spacing:
+signalSpacing 5
+
+; windowTimeUnit is used for zoom, cursor & marker
+; waveform viewport range
+zoom 0.000000 313.100000
+cursor 11.000000
+marker 0.000000
+
+; user define markers
+; userMarker time_pos marker_name color linestyle
+; visible top row signal index
+top 20
+; marker line index
+markerPos 74
+
+; event list
+; addEvent event_name event_expression
+; curEvent event_name
+
+
+
+COMPLEX_EVENT_BEGIN
+
+
+COMPLEX_EVENT_END
+
+
+
+; toolbar current search type
+; curSTATUS search_type
+curSTATUS ByChange
+
+
+addGroup "G1"
+addSubGroup "ROB" -e FALSE
+activeDirFile "" "/home/host/digital_ic/RV64/test/rename.fsdb"
+addSignal -h 15 -UNSIGNED -HEX /tb_rename/retire[3:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rob_areg_v[3:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rob_opreg[3:0]
+endSubGroup "ROB"
+addSignal -h 15 /tb_rename/clk
+addSignal -h 15 -holdScope rst
+addSignal -h 15 -UNSIGNED -HEX -holdScope j[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope k[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope i[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr_prd_v[3:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr_prs1_v[3:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr_prs2_v[3:0]
+addSubGroup "ARF"
+addSubGroup "rs"
+addSignal -h 15 -UNSIGNED -HEX /tb_rename/instr0_rs2[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr1_rs2[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr2_rs2[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr3_rs2[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr0_rs1[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr1_rs1[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr2_rs1[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr3_rs1[4:0]
+endSubGroup "rs"
+addSubGroup "rd"
+addSignal -h 15 -UNSIGNED -UDEC /tb_rename/instr0_rd[4:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr1_rd[4:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr2_rd[4:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr3_rd[4:0]
+endSubGroup "rd"
+endSubGroup "ARF"
+addSubGroup "freelist"
+addSignal -h 15 /tb_rename/clk
+addSignal -h 15 -holdScope rst
+addSignal -h 15 /tb_rename/rename_u0/fl_addr_before[4:0]
+addSignal -h 15 -holdScope free_num[2:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope fl_addr_after[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fl_waddr[4:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope free_wnum[2:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr0_fl_prd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr1_fl_prd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr2_fl_prd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr3_fl_prd[5:0]
+endSubGroup "freelist"
+addSubGroup "PRF"
+addSubGroup "prerd"
+addSignal -expanded -h 15 -UNSIGNED -HEX /tb_rename/rename_u0/rat[31:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[31][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[30][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[29][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[28][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[27][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[26][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[25][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[24][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[23][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[22][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[21][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[20][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[19][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[18][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[17][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[16][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[15][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[14][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[13][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[12][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[11][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[10][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[9][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[8][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[7][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[6][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[5][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[4][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[3][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[2][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[1][5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope rat[0][5:0]
+addSignal -h 15 -UNSIGNED -UDEC /tb_rename/instr0_preprd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr1_preprd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr2_preprd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr3_preprd[5:0]
+endSubGroup "prerd"
+addSubGroup "prd"
+addSignal -h 15 -UNSIGNED -UDEC /tb_rename/instr0_prd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr1_prd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope instr2_prd[5:0]
+addSignal -h 15 -UNSIGNED -UDEC /tb_rename/rename_u0/instr3_prd[5:0]
+endSubGroup "prd"
+addSubGroup "prs" -e FALSE
+addSignal -h 15 -UNSIGNED -HEX /tb_rename/instr0_prs1[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr1_prs1[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr2_prs1[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr3_prs1[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr0_prs2[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr1_prs2[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr2_prs2[5:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope instr3_prs2[5:0]
+endSubGroup "prs"
+endSubGroup "PRF"
+addSignal -h 15 -UNSIGNED -HEX /tb_rename/reg_rat[31:0]
+addGroup "G2"
+
+; getSignalForm Scope Hierarchy Status
+; active file of getSignalForm
+activeDirFile "" "/home/host/digital_ic/RV64/test/rename.fsdb"
+
+GETSIGNALFORM_SCOPE_HIERARCHY_BEGIN
+getSignalForm open
+
+"/tb_rename"
+"/tb_rename/rename_u0"
+
+SCOPE_LIST_BEGIN
+"/tb_rename"
+"/tb_rename/rename_u0"
+SCOPE_LIST_END
+
+GETSIGNALFORM_SCOPE_HIERARCHY_END
+
+

@@ -1,0 +1,3 @@
+/home/host/digital_ic/rv64-all/rtl/define.v
+/home/host/digital_ic/rv64-all/rtl/issue/arbiter.v
+/home/host/digital_ic/rv64-all/test/tb_arbiter.v

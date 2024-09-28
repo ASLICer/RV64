@@ -1,0 +1,134 @@
+Magic 271485
+Revision Verdi_O-2018.09-SP2
+
+; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
+viewPort 0 27 1718 568 165 65
+
+; File list:
+; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
+openDirFile -d / "" "/home/host/digital_ic/rv64-all/test.fsdb"
+
+; file time scale:
+; fileTimeScale ### s|ms|us|ns|ps
+
+; signal spacing:
+signalSpacing 5
+
+; windowTimeUnit is used for zoom, cursor & marker
+; waveform viewport range
+zoom 0.000000 83.750000
+cursor 0.000000
+marker 0.000000
+
+; user define markers
+; userMarker time_pos marker_name color linestyle
+; visible top row signal index
+top 0
+; marker line index
+markerPos 49
+
+; event list
+; addEvent event_name event_expression
+; curEvent event_name
+
+
+
+COMPLEX_EVENT_BEGIN
+
+
+COMPLEX_EVENT_END
+
+
+
+; toolbar current search type
+; curSTATUS search_type
+curSTATUS ByChange
+
+
+addGroup "G1"
+activeDirFile "" "/home/host/digital_ic/rv64-all/test.fsdb"
+addSignal -h 15 -UNSIGNED -BIN /tb_allocation/allocation_inst/ciq_free[15:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope free_addr[3:0]
+addSignal -h 15 -UNSIGNED -BIN -holdScope free_valid[3:0]
+addSubGroup "first" -e FALSE
+addSignal -h 15 -UNSIGNED -HEX /tb_allocation/allocation_inst/first_a0[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope first_a1[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope first_a2[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope first_a3[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope first_b0[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope first_b1[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope first_c0[3:0]
+addSignal -h 15 -holdScope v_first_a0
+addSignal -h 15 -holdScope v_first_a1
+addSignal -h 15 -holdScope v_first_a2
+addSignal -h 15 -holdScope v_first_a3
+addSignal -h 15 -holdScope v_first_b0
+addSignal -h 15 -holdScope v_first_b1
+addSignal -h 15 -holdScope v_first_c0
+endSubGroup "first"
+addSubGroup "second" -e FALSE
+addSignal -h 15 -UNSIGNED -HEX /tb_allocation/allocation_inst/second_a0[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope second_a1[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope second_a2[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope second_a3[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope second_b0[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope second_b1[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope second_c0[3:0]
+addSignal -h 15 -holdScope v_second_a0
+addSignal -h 15 -holdScope v_second_a1
+addSignal -h 15 -holdScope v_second_a2
+addSignal -h 15 -holdScope v_second_a3
+addSignal -h 15 -holdScope v_second_b0
+addSignal -h 15 -holdScope v_second_b1
+addSignal -h 15 -holdScope v_second_c0
+endSubGroup "second"
+addSubGroup "third" -e FALSE
+addSignal -h 15 -UNSIGNED -HEX /tb_allocation/allocation_inst/third_a0[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope third_a1[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope third_a2[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope third_a3[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope third_b0[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope third_b1[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope third_c0[3:0]
+addSignal -h 15 -holdScope v_third_a0
+addSignal -h 15 -holdScope v_third_a1
+addSignal -h 15 -holdScope v_third_a2
+addSignal -h 15 -holdScope v_third_a3
+addSignal -h 15 -holdScope v_third_b0
+addSignal -h 15 -holdScope v_third_b1
+addSignal -h 15 -holdScope v_third_c0
+endSubGroup "third"
+addGroup "fourth" -e FALSE
+addSignal -h 15 -UNSIGNED -HEX /tb_allocation/allocation_inst/fourth_a0[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fourth_a1[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fourth_a2[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fourth_a3[1:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fourth_b0[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fourth_b1[2:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope fourth_c0[3:0]
+addSignal -h 15 -holdScope v_fourth_a0
+addSignal -h 15 -holdScope v_fourth_a1
+addSignal -h 15 -holdScope v_fourth_a2
+addSignal -h 15 -holdScope v_fourth_a3
+addSignal -h 15 -holdScope v_fourth_b0
+addSignal -h 15 -holdScope v_fourth_b1
+addSignal -h 15 -holdScope v_fourth_c0
+addGroup "G2"
+
+; getSignalForm Scope Hierarchy Status
+; active file of getSignalForm
+activeDirFile "" "/home/host/digital_ic/rv64-all/test.fsdb"
+
+GETSIGNALFORM_SCOPE_HIERARCHY_BEGIN
+getSignalForm close
+
+"/tb_allocation"
+
+SCOPE_LIST_BEGIN
+"/tb_allocation"
+"/tb_allocation/allocation_inst"
+SCOPE_LIST_END
+
+GETSIGNALFORM_SCOPE_HIERARCHY_END
+
+

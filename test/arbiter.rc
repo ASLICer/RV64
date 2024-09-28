@@ -1,0 +1,75 @@
+Magic 271485
+Revision Verdi_O-2018.09-SP2
+
+; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
+viewPort 0 27 1718 656 165 65
+
+; File list:
+; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
+openDirFile -d / "" "/home/host/digital_ic/rv64-all/test.fsdb"
+
+; file time scale:
+; fileTimeScale ### s|ms|us|ns|ps
+
+; signal spacing:
+signalSpacing 5
+
+; windowTimeUnit is used for zoom, cursor & marker
+; waveform viewport range
+zoom 0.000000 129.280000
+cursor 10.000000
+marker 0.000000
+
+; user define markers
+; userMarker time_pos marker_name color linestyle
+; visible top row signal index
+top 0
+; marker line index
+markerPos 10
+
+; event list
+; addEvent event_name event_expression
+; curEvent event_name
+
+
+
+COMPLEX_EVENT_BEGIN
+
+
+COMPLEX_EVENT_END
+
+
+
+; toolbar current search type
+; curSTATUS search_type
+curSTATUS ByChange
+
+
+addGroup "G1"
+activeDirFile "" "/home/host/digital_ic/rv64-all/test.fsdb"
+addSignal -h 15 /tb_arbiter/arbiter_inst/grant
+addSignal -h 15 -holdScope muti_finish
+addSignal -h 15 -UNSIGNED -UDEC -holdScope op_correct[6:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope op[15:0]
+addSignal -h 15 -UNSIGNED -HEX -holdScope req[15:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope age[15:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope age8[7:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope age4[3:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope age2[1:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope age1[4:0]
+addSignal -h 15 -UNSIGNED -UDEC /tb_arbiter/age_correct[31:0]
+addSignal -h 15 -UNSIGNED -BIN /tb_arbiter/arbiter_inst/req16[15:0]
+addSignal -h 15 -holdScope req8[7:0]
+addSignal -h 15 -holdScope req4[3:0]
+addSignal -h 15 -holdScope req2[1:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope addr8[7:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope addr4[3:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope addr2[1:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope addr1[3:0]
+addSignal -h 15 -UNSIGNED -UDEC -holdScope addr[3:0]
+addSignal -h 15 -holdScope i[31:0]
+addGroup "G2"
+
+; getSignalForm Scope Hierarchy Status
+; active file of getSignalForm
+
